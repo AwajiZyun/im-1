@@ -32,6 +32,7 @@
                 <value>application/xml;charset=utf-8</value>
             </list>
         </property>
+        <property name="fastJsonConfig" ref="fastJsonConfig"/>
     </bean>
     <bean id="fastJsonConfig" class="com.alibaba.fastjson.support.config.FastJsonConfig">
         <property name="charset" value="utf-8"/>
@@ -39,11 +40,11 @@
         <property name="serializerFeatures">
             <list>
                 <value>WriteDateUseDateFormat</value>
+                <value>WriteMapNullValue</value>
             </list>
         </property>
     </bean>
 
     <!--根路径,web.xml中的welcome配置为空-->
     <mvc:view-controller path="/" view-name="forward:/"/>
-
 </beans>

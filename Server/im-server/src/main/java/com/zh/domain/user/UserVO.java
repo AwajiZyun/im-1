@@ -1,16 +1,13 @@
-package com.zh.domain;
+package com.zh.domain.user;
 
 import com.zh.constant.SexEnum;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
- * 用户信息
- * @Author zh2683
+ * @author zh2683
  */
 @Data
-public class UserPO {
+public class UserVO {
     // 主键
     private String id;
     // im号,唯一
@@ -23,8 +20,4 @@ public class UserPO {
     private String password;
     // 性别
     private SexEnum sex;
-    // 创建时间
-    private Date createTime;
-    // 修改时间
-    private Date modifyTime;
 }
