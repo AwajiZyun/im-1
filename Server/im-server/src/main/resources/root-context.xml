@@ -9,10 +9,12 @@
 
     <context:annotation-config />
 
-    <context:property-placeholder location="classpath:jdbc.properties" file-encoding="utf-8" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:jdbc.properties,classpath:im.properties"
+                                  file-encoding="utf-8" ignore-unresolvable="true"/>
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
+    <context:component-scan base-package="com.zh"/>
+
     <import resource="dao-context.xml"/>
-    <import resource="dispatcher-servlet.xml"/>
 </beans>
