@@ -1,12 +1,13 @@
-package com.zh;
+package com.zh.init;
 
 import com.zh.server.IMServer;
-import com.zh.init.SpringContextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 服务启动入口
+ * 服务启动器
+ * 初始化spring
+ * 启动netty服务
  * @author zh2683
  */
 public class ServerStarter {

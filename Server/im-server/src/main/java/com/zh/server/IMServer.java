@@ -1,5 +1,6 @@
 package com.zh.server;
 
+import com.zh.init.ImConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -26,9 +27,6 @@ public class IMServer {
     private static NioEventLoopGroup worker = new NioEventLoopGroup();
     private static ServerBootstrap serverBootstrap;
 
-    @Value("${im.port}")
-    public Integer port;
-
     @Autowired
     private ChannelInitializer channelInitializer;
 
@@ -39,7 +37,7 @@ public class IMServer {
                     .group(boss, worker)
                     .channel(NioServerSocketChannel.class)
                     .childHandler(channelInitializer);
-            bind(serverBootstrap, port);
+            bind(serverBootstrap, ImConfig.serverPort);
         }
     }
 
