@@ -1,6 +1,7 @@
 package com.zh.protocol;
 
 import com.zh.constant.PacketTypeEnum;
+import lombok.Data;
 
 /**
  * 数据包定义
@@ -13,10 +14,11 @@ import com.zh.constant.PacketTypeEnum;
  * data: 数据区....
  * @author zh2683
  */
+@Data
 public abstract class Packet {
 
     /**协议版本*/
-    private Byte version;
+    private Byte version = 1;
 
     public abstract PacketTypeEnum getType();
 }

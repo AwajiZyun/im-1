@@ -16,14 +16,16 @@ public class ImConfig {
     public static final Integer serverPort = 59454;
 
     /**协议魔数*/
-    public static final Integer magicNumber = 0x5A4848;
+    public static final byte[] magicNumber = new byte[]{57, 48, 48};
 
     /**每种packetType的对应类型*/
-    public static final Map<PacketTypeEnum, Class<? extends Packet>> packetTypeMap;
+    public static final Map<Short, Class<? extends Packet>> packetTypeMap;
 
     static {
         packetTypeMap = new HashMap<>();
-        packetTypeMap.put(PacketTypeEnum.LOGIN_REQUEST, LoginRequestPacketImpl.class);
+        for (PacketTypeEnum packetTypeEnum : PacketTypeEnum.values()) {
+            packetTypeMap.put(packetTypeEnum.code(), packetTypeEnum.packetType());
+        }
     }
 
 }

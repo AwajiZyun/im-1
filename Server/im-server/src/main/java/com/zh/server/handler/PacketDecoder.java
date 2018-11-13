@@ -1,5 +1,6 @@
 package com.zh.server.handler;
 
+import com.zh.protocol.PacketCodec;
 import com.zh.util.PacketUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -21,8 +22,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
         if (!PacketUtil.checkMagicNumber(magicNumber)) {
             channelHandlerContext.channel().close();
         }
-        // TODO 忽略魔数的正常解析流程
-        // ...
+        list.add(PacketCodec.decode(byteBuf));
     }
 
 }

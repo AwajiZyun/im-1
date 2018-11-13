@@ -21,6 +21,8 @@ public class SpringContextUtils implements ApplicationContextAware {
     private static final String configLocation = "classpath:root-context.xml";
 
     public static void init() {
+        if (context == null) return;
+
         synchronized (SpringContextUtils.class) {
             context = new ClassPathXmlApplicationContext(configLocation);
         }

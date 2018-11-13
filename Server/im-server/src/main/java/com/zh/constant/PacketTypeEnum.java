@@ -1,20 +1,27 @@
 package com.zh.constant;
 
+import com.zh.protocol.Packet;
+import com.zh.protocol.login.LoginRequestPacketImpl;
+
 /**
- * 协议类型
  * @author zh2683
  */
-public enum PacketTypeEnum {
-    LOGIN_REQUEST("登录请求"),
-    LOGIN_RESPONSE("登录响应"),
+public enum  PacketTypeEnum {
+    login_request((short)1, LoginRequestPacketImpl.class);
 
-    LOGOUT_REQUEST("登出请求"),
-    LOGOUT_RESPONSE("登出响应")
-    ;
+    private Short code;
+    private Class<? extends Packet> packetType;
 
-    private String desc;
+    PacketTypeEnum(Short code, Class<? extends Packet> packetType) {
+        this.code = code;
+        this.packetType = packetType;
+    }
 
-    PacketTypeEnum(String desc) {
-        this.desc = desc;
+    public Short code() {
+        return this.code;
+    }
+
+    public Class<? extends Packet> packetType() {
+        return this.packetType;
     }
 }
