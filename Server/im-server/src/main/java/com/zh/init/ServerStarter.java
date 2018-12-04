@@ -17,8 +17,6 @@ public class ServerStarter {
     public static void main(String[] args) {
         // 初始化spring, mybatis
         SpringContextUtils.init();
-        logger.info("spring初始化完成.");
-
         // 启动netty
         IMServer imServer = SpringContextUtils.getBean(IMServer.class);
         imServer.start();

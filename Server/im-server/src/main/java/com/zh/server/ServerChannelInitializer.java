@@ -1,5 +1,7 @@
-package com.zh.server.handler;
+package com.zh.server;
 
+import com.zh.server.handler.PacketDecoder;
+import com.zh.server.handler.PacketEncoder;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.springframework.stereotype.Component;
@@ -11,8 +13,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class ServerChannelInitializer extends ChannelInitializer<NioSocketChannel> {
 
+    private PacketDecoder packetDecoder;
+    private PacketEncoder packetEncoder;
+
     @Override
     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
-        // TODO handler
+        nioSocketChannel.pipeline()
+                .addLast(packetDecoder)
+                .addLast(packetEncoder);
     }
 }

@@ -1,6 +1,7 @@
 package com.zh.protocol;
 
 import com.alibaba.fastjson.JSONObject;
+import com.zh.constant.SystemConsts;
 import com.zh.init.ImConfig;
 import com.zh.protocol.login.LoginRequestPacketImpl;
 import io.netty.buffer.ByteBuf;
@@ -14,14 +15,6 @@ import java.nio.charset.Charset;
  */
 public class PacketCodec {
 
-    public static void main(String[] args) {
-        LoginRequestPacketImpl loginRequestPacket = new LoginRequestPacketImpl();
-        loginRequestPacket.setCode("594542356");
-        loginRequestPacket.setPassword("123123123");
-        Packet packet = decode(encode(loginRequestPacket));
-        System.out.println(JSONObject.toJSON(packet));
-    }
-
     /**
      * 编码
      * @param packet
@@ -29,10 +22,8 @@ public class PacketCodec {
      */
     public static ByteBuf encode(Packet packet) {
         String data = JSONObject.toJSONString(packet);
-        byte[] dataBytes = data.getBytes(Charset.forName("utf-8"));
+        byte[] dataBytes = data.getBytes(Charset.forName(SystemConsts.ENCODING_UTF8));
         ByteBuf byteBuf = ByteBufAllocator.DEFAULT.buffer();
-        System.out.println(byteBuf.readerIndex());
-        System.out.println(byteBuf.writerIndex());
         // 魔数
         byteBuf.writeBytes(ImConfig.magicNumber);
         // 协议版本

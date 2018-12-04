@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * im服务配置项
  * @author zh2683
  */
 public class ImConfig {

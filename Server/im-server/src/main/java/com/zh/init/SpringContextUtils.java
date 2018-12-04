@@ -1,7 +1,5 @@
 package com.zh.init;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -20,10 +18,8 @@ public class SpringContextUtils implements ApplicationContextAware {
 
     private static final String configLocation = "classpath:root-context.xml";
 
-    public static void init() {
-        if (context == null) return;
-
-        synchronized (SpringContextUtils.class) {
+    public synchronized static void init() {
+        if (context == null) {
             context = new ClassPathXmlApplicationContext(configLocation);
         }
     }
