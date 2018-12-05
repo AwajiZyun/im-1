@@ -1,5 +1,10 @@
 {
     "success": true,
-    "data": "",
+    "data": {
+	"code": "XXXXXX",
+        "email": "xxxxxx@163.com",
+        "nickname": "nickname",
+        "sex": 1
+    },
     "msg": "失败原因"
 }

@@ -2,5 +2,6 @@
     "code": "xxxxxx",
     "nickname": "nickname",
     "sex": 1,
-    "password": "rsa_pwd"
+    "oldPassword": "rsa_pwd",
+    "newPassword": "rsa_pwd"
 }

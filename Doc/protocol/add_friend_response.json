@@ -1,5 +1,10 @@
 {
     "success": true,
-    "data": null,
+    "data": {
+        "code": "xxxxxx",
+	"email": "zh@163.com",
+	"nickname": "zh",
+	"sex": 1,
+    }
     "msg": null
 }
