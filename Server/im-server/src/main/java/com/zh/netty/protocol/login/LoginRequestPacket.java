@@ -1,14 +1,14 @@
-package com.zh.protocol.login;
+package com.zh.netty.protocol.login;
 
-import com.zh.constant.PacketTypeEnum;
-import com.zh.protocol.Packet;
+import com.zh.netty.constant.PacketTypeEnum;
+import com.zh.netty.protocol.Packet;
 import lombok.Data;
 
 /**
  * @author zh2683
  */
 @Data
-public class LoginRequestPacketImpl extends Packet {
+public class LoginRequestPacket extends Packet {
 
     private String code;
 

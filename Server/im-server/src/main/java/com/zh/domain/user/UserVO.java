@@ -16,8 +16,6 @@ public class UserVO {
     private String email;
     // 昵称
     private String nickname;
-    //
-    private String password;
     // 性别
     private SexEnum sex;
 }

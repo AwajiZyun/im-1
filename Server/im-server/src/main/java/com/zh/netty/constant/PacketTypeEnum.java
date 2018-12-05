@@ -1,13 +1,16 @@
-package com.zh.constant;
+package com.zh.netty.constant;
 
-import com.zh.protocol.Packet;
-import com.zh.protocol.login.LoginRequestPacketImpl;
+import com.zh.netty.protocol.Packet;
+import com.zh.netty.protocol.login.LoginRequestPacket;
+import com.zh.netty.protocol.login.LoginResponsePacket;
 
 /**
  * @author zh2683
  */
 public enum  PacketTypeEnum {
-    login_request((short)1, LoginRequestPacketImpl.class);
+    login_request((short)1, LoginRequestPacket.class),
+    login_response((short)2, LoginResponsePacket.class)
+    ;
 
     private Short code;
     private Class<? extends Packet> packetType;

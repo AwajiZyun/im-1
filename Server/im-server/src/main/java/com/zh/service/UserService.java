@@ -37,4 +37,14 @@ public class UserService {
     public Integer count() {
         return userMapper.count();
     }
+
+    public UserDTO selectByCodeAndPassword(String code, String password) {
+        UserPO userPO = userMapper.selectByCodeAndPassword(code, password);
+        if (userPO == null) {
+            return null;
+        }
+        UserDTO userDTO = new UserDTO();
+        BeanUtils.copyProperties(userPO, userPO);
+        return userDTO;
+    }
 }

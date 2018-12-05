@@ -12,4 +12,6 @@ public interface UserMapper {
     List<UserPO> listAll();
 
     Integer count();
+
+    UserPO selectByCodeAndPassword(String code, String password);
 }

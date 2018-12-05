@@ -1,7 +1,7 @@
-package com.zh.server.handler;
+package com.zh.netty.server.handler;
 
-import com.zh.protocol.Packet;
-import com.zh.protocol.PacketCodec;
+import com.zh.netty.protocol.Packet;
+import com.zh.netty.protocol.PacketCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;

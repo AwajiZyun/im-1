@@ -1,6 +1,6 @@
-package com.zh.init;
+package com.zh.main;
 
-import com.zh.server.IMServer;
+import com.zh.netty.server.IMServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

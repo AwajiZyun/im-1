@@ -1,9 +1,8 @@
-package com.zh.init;
+package com.zh.main;
 
 
-import com.zh.constant.PacketTypeEnum;
-import com.zh.protocol.Packet;
-import com.zh.protocol.login.LoginRequestPacketImpl;
+import com.zh.netty.constant.PacketTypeEnum;
+import com.zh.netty.protocol.Packet;
 
 import java.util.HashMap;
 import java.util.Map;

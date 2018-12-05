@@ -1,7 +1,7 @@
 package com.zh.util;
 
-import com.zh.init.ImConfig;
-import com.zh.protocol.Packet;
+import com.zh.main.ImConfig;
+import com.zh.netty.protocol.Packet;
 
 /**
  * 对包进行处理

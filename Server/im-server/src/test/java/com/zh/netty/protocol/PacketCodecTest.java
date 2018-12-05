@@ -1,7 +1,7 @@
-package com.zh.protocol;
+package com.zh.netty.protocol;
 
-import com.zh.constant.PacketTypeEnum;
-import com.zh.protocol.login.LoginRequestPacketImpl;
+import com.zh.netty.constant.PacketTypeEnum;
+import com.zh.netty.protocol.login.LoginRequestPacket;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,14 +15,14 @@ public class PacketCodecTest {
 
     @Test
     public void testEncodeAndDecode() {
-        LoginRequestPacketImpl loginRequestPacket = new LoginRequestPacketImpl();
+        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
         loginRequestPacket.setCode(code);
         loginRequestPacket.setPassword(password);
         Packet packet = PacketCodec.decode(PacketCodec.encode(loginRequestPacket));
 
-        Assert.assertTrue(packet instanceof LoginRequestPacketImpl);
+        Assert.assertTrue(packet instanceof LoginRequestPacket);
         Assert.assertTrue(packet.getVersion() == 1);
-        LoginRequestPacketImpl loginRequest = (LoginRequestPacketImpl) packet;
+        LoginRequestPacket loginRequest = (LoginRequestPacket) packet;
         Assert.assertEquals(loginRequest.getCode(), code);
         Assert.assertEquals(loginRequest.getPassword(), password);
         Assert.assertEquals(loginRequest.getType(), PacketTypeEnum.login_request);

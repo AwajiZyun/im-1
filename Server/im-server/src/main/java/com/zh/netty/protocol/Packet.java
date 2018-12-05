@@ -1,6 +1,7 @@
-package com.zh.protocol;
+package com.zh.netty.protocol;
 
-import com.zh.constant.PacketTypeEnum;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.zh.netty.constant.PacketTypeEnum;
 import lombok.Data;
 
 /**
@@ -18,7 +19,9 @@ import lombok.Data;
 public abstract class Packet {
 
     /**协议版本*/
+    @JSONField(serialize = false)
     private Byte version = 1;
 
+    @JSONField(serialize = false)
     public abstract PacketTypeEnum getType();
 }

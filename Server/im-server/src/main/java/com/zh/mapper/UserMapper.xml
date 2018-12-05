@@ -26,4 +26,9 @@
     <select id="count" resultType="java.lang.Integer">
         select count(*) from `user` where  `delete` = 0;
     </select>
+
+    <select id="selectByCodeAndPassword" resultType="UserPO">
+        select <include refid="all_usercolumns"/>
+        from `user` where `code` = #{code} and `password` = #{password} and `delete` = 0;
+    </select>
 </mapper>

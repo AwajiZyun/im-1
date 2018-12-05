@@ -1,11 +1,11 @@
-package com.zh.server.handler;
+package com.zh.netty.server.handler;
 
-import com.zh.protocol.PacketCodec;
+import com.zh.netty.protocol.PacketCodec;
 import com.zh.util.PacketUtil;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ import java.util.List;
  * 消息解码器
  * @author zh2683
  */
+@Component
 public class PacketDecoder extends ByteToMessageDecoder {
 
     @Override
