@@ -25,9 +25,7 @@ public class UserService {
         List<UserDTO> userDTOS = new ArrayList<>();
         if (userPOS != null && userPOS.size() > 0) {
             for (UserPO userPO : userPOS) {
-                UserDTO userDTO = new UserDTO();
-                BeanUtils.copyProperties(userPO, userDTO);
-                userDTOS.add(userDTO);
+                userDTOS.add(getUserDTO(userPO));
             }
         }
 
@@ -40,6 +38,19 @@ public class UserService {
 
     public UserDTO selectByCodeAndPassword(String code, String password) {
         UserPO userPO = userMapper.selectByCodeAndPassword(code, password);
+        return getUserDTO(userPO);
+    }
+
+    public UserDTO selectByEmail(String email) {
+        UserPO userPO = userMapper.selectByEmail(email);
+        return getUserDTO(userPO);
+    }
+
+    public void save(UserPO userPO) {
+        userMapper.save(userPO);
+    }
+
+    private UserDTO getUserDTO(UserPO userPO) {
         if (userPO == null) {
             return null;
         }

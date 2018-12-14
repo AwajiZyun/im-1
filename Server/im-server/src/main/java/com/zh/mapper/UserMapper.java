@@ -9,9 +9,13 @@ import java.util.List;
  */
 public interface UserMapper {
 
+    void save(UserPO userPO);
+
     List<UserPO> listAll();
 
     Integer count();
 
     UserPO selectByCodeAndPassword(String code, String password);
+
+    UserPO selectByEmail(String email);
 }

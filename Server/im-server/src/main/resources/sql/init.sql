@@ -4,6 +4,7 @@ create table user(
   id varchar(32),
   code varchar(20) unique not null,
   email varchar(50) unique not null,
+  email_crc32 bigint not null,
   nickname varchar(20) not null,
   password varchar(12) not null,
   sex int,

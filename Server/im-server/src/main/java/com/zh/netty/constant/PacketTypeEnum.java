@@ -3,13 +3,17 @@ package com.zh.netty.constant;
 import com.zh.netty.protocol.Packet;
 import com.zh.netty.protocol.login.LoginRequestPacket;
 import com.zh.netty.protocol.login.LoginResponsePacket;
+import com.zh.netty.protocol.register.RegisterRequestPacket;
+import com.zh.netty.protocol.register.RegisterResponsePacket;
 
 /**
  * @author zh2683
  */
 public enum  PacketTypeEnum {
     login_request((short)1, LoginRequestPacket.class),
-    login_response((short)2, LoginResponsePacket.class)
+    login_response((short)2, LoginResponsePacket.class),
+    register_request((short)3, RegisterRequestPacket.class),
+    register_response((short)4, RegisterResponsePacket.class)
     ;
 
     private Short code;

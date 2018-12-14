@@ -16,19 +16,36 @@
         <result column="modifyTime" property="modifyTime" javaType="java.util.Date" jdbcType="DATE"/>
     </resultMap>
 
-    <sql id="all_usercolumns">id, `code`, email, nickname, `password`, sex, `delete`, createTime, modifyTime</sql>
+    <sql id="all_select_columns">id, `code`, email, nickname, `password`, sex, `delete`, createTime, modifyTime</sql>
+
+    <sql id="all_insert_columns">id, `code`, email, email_crc32, nickname, `password`, sex, `delete`, createTime, modifyTime</sql>
+
+    <insert id="save" parameterMap="UserPO">
+        insert into `user`(<include refid="all_insert_columns"/>)
+        values (#{id}, #{code}, #{email}, crc32(#{email}), #{nickname}, #{password}, #{sex}, #{delete}, #{createTime}, #{modifyTime})
+    </insert>
 
     <select id="listAll" resultMap="user">
-        SELECT <include refid="all_usercolumns"/>
-        FROM user where `delete` = 0;
+        select <include refid="all_select_columns"/>
+        from user
+        where `delete` = 0;
     </select>
 
     <select id="count" resultType="java.lang.Integer">
-        select count(*) from `user` where  `delete` = 0;
+        select count(*)
+        from `user`
+        where  `delete` = 0;
     </select>
 
     <select id="selectByCodeAndPassword" resultType="UserPO">
-        select <include refid="all_usercolumns"/>
-        from `user` where `code` = #{code} and `password` = #{password} and `delete` = 0;
+        select <include refid="all_select_columns"/>
+        from `user`
+        where `code` = #{code} and `password` = #{password} and `delete` = 0;
+    </select>
+
+    <select id="selectByEmail" parameterType="java.lang.String" resultType="UserPO">
+        select <include refid="all_select_columns"/>
+        from `user`
+        where email_crc32 = crc32(#{email}) and email = #{email} and `delete` = 0;
     </select>
 </mapper>
