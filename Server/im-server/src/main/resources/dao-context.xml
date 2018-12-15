@@ -42,4 +42,30 @@
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--redis-->
+    <bean id="redisConfig" class="org.springframework.data.redis.connection.RedisStandaloneConfiguration">
+        <property name="hostName" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="database" value="${redis.database}"/>
+        <property name="password" value="${redis.password}"/>
+    </bean>
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxIdle" value="${redis.maxIdle}"/>
+        <property name="maxTotal" value="${redis.maxTotal}"/>
+        <property name="maxWaitMillis" value="${redis.maxWaitMillis}"/>
+        <property name="blockWhenExhausted" value="${redis.blockWhenExhausted}"/>
+        <property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+    </bean>
+    <bean id="jedisClientConfig" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory$MutableJedisClientConfiguration">
+        <property name="poolConfig" ref="jedisPoolConfig"/>
+        <property name="readTimeout" value="${redis.timeout}"/>
+    </bean>
+    <bean id="jedisConnectionFacoty" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <constructor-arg name="standaloneConfig" ref="redisConfig"/>
+        <constructor-arg name="clientConfig" ref="jedisClientConfig"/>
+    </bean>
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="jedisConnectionFacoty"/>
+    </bean>
 </beans>

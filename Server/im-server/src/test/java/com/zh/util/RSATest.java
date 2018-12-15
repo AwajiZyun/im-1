@@ -11,7 +11,7 @@ import java.util.Map;
 public class RSATest {
 
     @Test
-    public void main(String[] args) {
+    public void rsa() {
         Map<String, String> map = RSAUtil.generateKeyPair();
         String publicKey = map.get("publicKey");
         String privateKey = map.get("privateKey");

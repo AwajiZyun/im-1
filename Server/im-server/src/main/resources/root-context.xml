@@ -9,7 +9,7 @@
 
     <context:annotation-config />
 
-    <context:property-placeholder location="classpath:jdbc.properties,classpath:im.properties"
+    <context:property-placeholder location="classpath:jdbc.properties,classpath:im.properties,classpath:redis.properties"
                                   file-encoding="utf-8" ignore-unresolvable="true"/>
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>

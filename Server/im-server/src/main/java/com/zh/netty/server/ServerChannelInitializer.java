@@ -3,6 +3,7 @@ package com.zh.netty.server;
 import com.zh.netty.server.handler.LoginRequestHandler;
 import com.zh.netty.server.handler.PacketDecoder;
 import com.zh.netty.server.handler.PacketEncoder;
+import com.zh.netty.server.handler.RegisterRequestHandler;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +22,14 @@ public class ServerChannelInitializer extends ChannelInitializer<NioSocketChanne
     private PacketEncoder packetEncoder;
     @Autowired
     private LoginRequestHandler loginRequestHandler;
+    @Autowired
+    private RegisterRequestHandler registerRequestHandler;
 
     @Override
     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
         nioSocketChannel.pipeline()
                 .addLast(packetDecoder)
+                .addLast(registerRequestHandler)
                 .addLast(loginRequestHandler)
                 .addLast(packetEncoder);
     }

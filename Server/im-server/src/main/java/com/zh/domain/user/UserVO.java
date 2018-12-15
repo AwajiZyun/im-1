@@ -11,7 +11,7 @@ public class UserVO {
     // 主键
     private String id;
     // im号,唯一
-    private String code;
+    private Integer code;
     // 邮箱, 唯一
     private String email;
     // 昵称

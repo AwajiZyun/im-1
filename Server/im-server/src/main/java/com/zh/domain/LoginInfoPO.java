@@ -13,7 +13,7 @@ public class LoginInfoPO {
 
     private String id;
 
-    private String code;
+    private Integer code;
 
     private Date date;
 

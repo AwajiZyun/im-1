@@ -28,4 +28,13 @@ public interface SystemConsts {
                          "gp5lU2vkm5xXamjFZ+FKN95McZFIyEPAhTTAq4o0ryJgtjqGz5Nt7Jqwuuo2+BR62T8Bpso7Ar0C" +
                          "QQDvaOtb/vUOavRnXRkjltLidTwlJetRNT89JQH1s4c7suYuybIwMpqz+An9JMz7cynszOmW7Mi/" +
                          "R9NanljtIojo";
+
+    /**
+     * 未使用的code池
+     */
+    String RAW_CODE_POOL = "raw_code_pool";
+    /**
+     * 已被使用的code池
+     */
+    String USED_CODE_POOL = "used_code_pool";
 }
