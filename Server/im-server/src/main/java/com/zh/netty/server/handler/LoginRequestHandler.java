@@ -6,9 +6,12 @@ import com.zh.netty.protocol.login.LoginRequestPacket;
 import com.zh.netty.protocol.login.LoginResponsePacket;
 import com.zh.service.LoginService;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Component;
  * @author zh2683
  */
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
 
     @Autowired

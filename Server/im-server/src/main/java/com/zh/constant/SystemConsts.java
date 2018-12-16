@@ -37,4 +37,9 @@ public interface SystemConsts {
      * 已被使用的code池
      */
     String USED_CODE_POOL = "used_code_pool";
+
+    /**
+     * 空闲时间
+     */
+    Integer CHANNEL_IDLE_TIME = 10;
 }

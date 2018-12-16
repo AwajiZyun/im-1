@@ -5,6 +5,7 @@ import com.zh.domain.user.UserVO;
 import com.zh.netty.protocol.register.RegisterRequestPacket;
 import com.zh.netty.protocol.register.RegisterResponsePacket;
 import com.zh.service.RegisterService;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+@ChannelHandler.Sharable
 public class RegisterRequestHandler extends SimpleChannelInboundHandler<RegisterRequestPacket> {
 
     @Autowired
