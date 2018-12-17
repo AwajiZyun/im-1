@@ -19,6 +19,6 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Packet msg, ByteBuf out) throws Exception {
-        out.writeBytes(out);
+        out.writeBytes(PacketCodec.encode(msg));
     }
 }

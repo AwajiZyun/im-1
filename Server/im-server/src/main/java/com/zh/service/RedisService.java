@@ -15,7 +15,11 @@ public class RedisService {
     private StringRedisTemplate redisTemplate;
 
     public String lpop(String key) {
-        return redisTemplate.opsForList().leftPop("");
+        return redisTemplate.opsForList().leftPop(key);
+    }
+
+    public Long lpush(String key, String value) {
+        return redisTemplate.opsForList().leftPush(key, value);
     }
 
     public Long rpush(String key, String value) {

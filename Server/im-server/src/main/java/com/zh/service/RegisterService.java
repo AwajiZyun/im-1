@@ -31,6 +31,7 @@ public class RegisterService {
     @Transactional
     public RegisterResponsePacket register(RegisterRequestPacket registerRequestPacket) {
         RegisterResponsePacket registerResponsePacket = new RegisterResponsePacket();
+        Integer code = null;
         try {
             UserDTO userDTO = userService.selectByEmail(registerRequestPacket.getEmail());
             if (userDTO == null) {
@@ -44,7 +45,7 @@ public class RegisterService {
                 userPO.setCreateTime(new Date());
                 userPO.setDelete(false);
                 // TODO 这里要检测队列长度,然后在号码短缺时自动增长
-                Integer code = Integer.valueOf(redisService.lpop(SystemConsts.RAW_CODE_POOL));
+                code = Integer.valueOf(redisService.lpop(SystemConsts.RAW_CODE_POOL));
                 userPO.setCode(code);
                 userService.save(userPO);
                 registerResponsePacket.setMsg("注册成功");
@@ -57,8 +58,18 @@ public class RegisterService {
                 registerResponsePacket.setSuccess(false);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             registerResponsePacket.setMsg("系统错误");
             registerResponsePacket.setSuccess(false);
+        } finally {
+            if (code != null) {
+                // 回收逻辑
+                if (registerResponsePacket.getSuccess()) {
+                    redisService.rpush(SystemConsts.USED_CODE_POOL, String.valueOf(code));
+                } else {
+                    redisService.lpush(SystemConsts.RAW_CODE_POOL, String.valueOf(code));
+                }
+            }
         }
         return registerResponsePacket;
     }

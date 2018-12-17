@@ -30,4 +30,9 @@ public class PacketDecoder extends ByteToMessageDecoder {
         list.add(PacketCodec.decode(byteBuf));
     }
 
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        cause.printStackTrace();
+    }
+
 }

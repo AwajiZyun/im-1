@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class ImConfig {
     /**服务端口号*/
-    public static final Integer serverPort = 59454;
+    public static final Integer serverPort = 8080;
 
     /**协议魔数*/
     public static final byte[] magicNumber = new byte[]{57, 48, 48};

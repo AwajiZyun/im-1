@@ -18,19 +18,23 @@ public class CheckAuthHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        if (ctx.channel().hasAttr(AttributeKeyConsts.login)) {
-            ctx.pipeline().remove(this);
-        } else {
-            ctx.channel().close();
-        }
+//        if (!ctx.channel().hasAttr(AttributeKeyConsts.login) &&
+//                ctx.channel().hasAttr(AttributeKeyConsts.register)) {
+//            return;
+//        }
+//        if (ctx.channel().hasAttr(AttributeKeyConsts.login)) {
+//            ctx.pipeline().remove(this);
+//        } else {
+//            ctx.channel().close();
+//        }
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        if (ctx.channel().hasAttr(AttributeKeyConsts.login)) {
-            System.out.println("已被认证，认证处理被移除");
-        } else {
-            System.out.println("未认证通过，连接关闭");
-        }
+//        if (ctx.channel().hasAttr(AttributeKeyConsts.login)) {
+//            System.out.println("已被认证，认证处理被移除");
+//        } else {
+//            System.out.println("未认证通过，连接关闭");
+//        }
     }
 }

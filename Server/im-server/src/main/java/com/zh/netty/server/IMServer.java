@@ -52,6 +52,7 @@ public class IMServer {
     }
 
     public static void close() {
+        System.out.println("close...");
         // TODO 优雅退出
         System.exit(1);
     }

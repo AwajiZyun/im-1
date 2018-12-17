@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zh.mapper.UserMapper">
-    <resultMap id="user" type="UserPO">
+    <resultMap id="user" type="com.zh.domain.user.UserPO">
         <id column="id" property="id" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="code" property="code" javaType="java.lang.Integer" jdbcType="INTEGER"/>
         <result column="email" property="email" javaType="java.lang.String" jdbcType="VARCHAR"/>
@@ -20,9 +20,12 @@
 
     <sql id="all_insert_columns">id, `code`, email, email_crc32, nickname, `password`, sex, `delete`, createTime, modifyTime</sql>
 
-    <insert id="save" parameterMap="UserPO">
+    <insert id="save" parameterType="UserPO">
         insert into `user`(<include refid="all_insert_columns"/>)
-        values (#{id}, #{code}, #{email}, crc32(#{email}), #{nickname}, #{password}, #{sex}, #{delete}, #{createTime}, #{modifyTime})
+        values (#{id}, #{code}, #{email}, crc32(#{email}),
+                #{nickname}, #{password},
+                #{sex, typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
+                #{delete}, #{createTime}, #{modifyTime})
     </insert>
 
     <select id="listAll" resultMap="user">
@@ -43,7 +46,7 @@
         where `code` = #{code} and `password` = #{password} and `delete` = 0;
     </select>
 
-    <select id="selectByEmail" parameterType="java.lang.String" resultType="UserPO">
+    <select id="selectByEmail" parameterType="java.lang.String" resultType="com.zh.domain.user.UserPO">
         select <include refid="all_select_columns"/>
         from `user`
         where email_crc32 = crc32(#{email}) and email = #{email} and `delete` = 0;

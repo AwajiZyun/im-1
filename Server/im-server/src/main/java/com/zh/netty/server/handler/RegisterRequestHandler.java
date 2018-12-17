@@ -1,9 +1,7 @@
 package com.zh.netty.server.handler;
 
-import com.zh.domain.user.UserDTO;
-import com.zh.domain.user.UserVO;
+import com.zh.netty.constant.AttributeKeyConsts;
 import com.zh.netty.protocol.register.RegisterRequestPacket;
-import com.zh.netty.protocol.register.RegisterResponsePacket;
 import com.zh.service.RegisterService;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -26,6 +24,7 @@ public class RegisterRequestHandler extends SimpleChannelInboundHandler<Register
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RegisterRequestPacket msg) throws Exception {
+        ctx.channel().attr(AttributeKeyConsts.register);
         ctx.channel().writeAndFlush(registerService.register(msg));
     }
 }
