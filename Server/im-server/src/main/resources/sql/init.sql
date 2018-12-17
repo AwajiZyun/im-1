@@ -7,10 +7,9 @@ create table user(
   email_crc32 bigint not null,
   nickname varchar(20) not null,
   password varchar(12) not null,
-  sex int,
-  `delete` int,
+  sex int not null,
+  `delete` int not null,
   createTime datetime not null,
   modifyTime datetime,
   primary key(id)
 ) engine=innodb;
-

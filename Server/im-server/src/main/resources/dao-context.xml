@@ -48,7 +48,11 @@
         <property name="hostName" value="${redis.host}"/>
         <property name="port" value="${redis.port}"/>
         <property name="database" value="${redis.database}"/>
-        <property name="password" value="${redis.password}"/>
+        <property name="password">
+            <bean class="org.springframework.data.redis.connection.RedisPassword">
+                <constructor-arg name="thePassword" value="${redis.password}"/>
+            </bean>
+        </property>
     </bean>
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxIdle" value="${redis.maxIdle}"/>
@@ -59,7 +63,12 @@
     </bean>
     <bean id="jedisClientConfig" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory$MutableJedisClientConfiguration">
         <property name="poolConfig" ref="jedisPoolConfig"/>
-        <property name="readTimeout" value="${redis.timeout}"/>
+        <property name="readTimeout">
+            <bean class="java.time.Duration">
+                <constructor-arg name="seconds" value="${redis.timeout}"/>
+                <constructor-arg name="nanos" value="0"/>
+            </bean>
+        </property>
     </bean>
     <bean id="jedisConnectionFacoty" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
         <constructor-arg name="standaloneConfig" ref="redisConfig"/>

@@ -20,22 +20,7 @@ public class PacketCodec {
      * @return
      */
     public static ByteBuf encode(Packet packet) {
-        String data = JSONObject.toJSONString(packet);
-        byte[] dataBytes = data.getBytes(Charset.forName(SystemConsts.ENCODING_UTF8));
-        ByteBuf byteBuf = ByteBufAllocator.DEFAULT.buffer();
-        // 魔数
-        byteBuf.writeBytes(ImConfig.magicNumber);
-        // 协议版本
-        byteBuf.writeByte(packet.getVersion());
-        // 总长度
-        byteBuf.writeInt(dataBytes.length);
-        // 消息类型
-        byteBuf.writeShort(packet.getType().code());
-        // 6字节保留
-        byteBuf.writerIndex(byteBuf.writerIndex() + 6);
-        // 数据区
-        byteBuf.writeBytes(dataBytes);
-        return byteBuf;
+        return getResponseByteBuf(packet);
     }
 
     /**
@@ -63,6 +48,10 @@ public class PacketCodec {
      * @return
      */
     public static ByteBuf encode(ResponsePacket responsePacket) {
+        return getResponseByteBuf(responsePacket);
+    }
+
+    private static ByteBuf getResponseByteBuf(Packet responsePacket) {
         String data = JSONObject.toJSONString(responsePacket);
         byte[] dataBytes = data.getBytes(Charset.forName(SystemConsts.ENCODING_UTF8));
         ByteBuf byteBuf = ByteBufAllocator.DEFAULT.buffer();

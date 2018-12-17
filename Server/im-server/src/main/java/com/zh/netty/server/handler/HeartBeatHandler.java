@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
 @ChannelHandler.Sharable
 public class HeartBeatHandler extends SimpleChannelInboundHandler<HeartBeatRequestPacket> {
 
-
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HeartBeatRequestPacket msg) throws Exception {
         ctx.channel().writeAndFlush(new HeartBeatResponsePacket());
