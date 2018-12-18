@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class LoginRequestPacket extends Packet {
 
-    private String code;
+    private Integer code;
 
     private String password;
 

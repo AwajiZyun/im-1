@@ -1,7 +1,6 @@
 package com.zh.netty.handler;
 
 import com.zh.constant.SystemConsts;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
@@ -16,8 +15,7 @@ import java.util.concurrent.TimeUnit;
  * @author zh2683
  */
 @Component
-@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@ChannelHandler.Sharable
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class IdleHandler extends IdleStateHandler {
 
     public IdleHandler() {
@@ -25,7 +23,19 @@ public class IdleHandler extends IdleStateHandler {
     }
 
     protected void channelIdle(ChannelHandlerContext ctx, IdleStateEvent evt) throws Exception {
-        System.out.println("空闲太久，关闭...");
+        System.out.println("空闲时间过长，关闭次此连接...");
         ctx.channel().close();
+    }
+
+    @Override
+    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("idleHandler被添加");
+        super.handlerAdded(ctx);
+    }
+
+    @Override
+    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("idleHandler被移除");
+        super.handlerRemoved(ctx);
     }
 }

@@ -30,9 +30,16 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket msg) throws Exception {
         LoginResponsePacket loginResponsePacket = loginService.login(msg);
         if (loginResponsePacket.getSuccess()) {
-            ctx.channel().attr(AttributeKeyConsts.login);
+            ctx.channel().attr(AttributeKeyConsts.login).set(true);
         }
         ByteBuf byteBuf = PacketCodec.encode(loginResponsePacket);
         ctx.channel().writeAndFlush(byteBuf);
+    }
+
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+        System.out.println("登录异常...");
+        cause.printStackTrace();
+        ctx.channel().close();
     }
 }

@@ -24,7 +24,7 @@ public class RegisterRequestHandler extends SimpleChannelInboundHandler<Register
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, RegisterRequestPacket msg) throws Exception {
-        ctx.channel().attr(AttributeKeyConsts.register);
+        ctx.channel().attr(AttributeKeyConsts.register).set(true);
         ctx.channel().writeAndFlush(registerService.register(msg));
     }
 }

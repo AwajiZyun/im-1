@@ -1,6 +1,7 @@
 package com.zh.mapper;
 
 import com.zh.domain.user.UserPO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface UserMapper {
 
     Integer count();
 
-    UserPO selectByCodeAndPassword(String code, String password);
+    UserPO selectByCodeAndPassword(@Param("code") Integer code, @Param("password") String password);
 
     UserPO selectByEmail(String email);
 }

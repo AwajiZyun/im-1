@@ -1,10 +1,15 @@
 package com.zh.netty.client;
 
 import com.zh.constant.ImConfig;
+import com.zh.constant.SystemConsts;
 import com.zh.netty.client.handler.TestHeartResponseHandler;
+import com.zh.netty.client.handler.TestLoginResponseHandler;
+import com.zh.netty.handler.HeartBeatHandler;
 import com.zh.netty.handler.PacketDecoder;
 import com.zh.netty.handler.PacketEncoder;
 import com.zh.netty.protocol.hearbeat.HeartBeatRequestPacket;
+import com.zh.netty.protocol.login.LoginRequestPacket;
+import com.zh.util.RSAUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -19,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author zh2683
  */
-public class HeartBeatTest {
+public class LoginTest {
 
 
     public static void main(String[] args) {
@@ -34,6 +39,7 @@ public class HeartBeatTest {
                         socketChannel
                                 .pipeline()
                                 .addLast(new PacketDecoder())
+                                .addLast(new TestLoginResponseHandler())
                                 .addLast(new TestHeartResponseHandler())
                                 .addLast(new PacketEncoder());
                     }
@@ -41,14 +47,15 @@ public class HeartBeatTest {
         bootstrap.connect("127.0.0.1", ImConfig.serverPort)
                 .addListener(future -> {
                    if (future.isSuccess()) {
-                       HeartBeatRequestPacket heartBeatRequestPacket = new HeartBeatRequestPacket();
                        Channel channel = ((ChannelFuture)future).channel();
-                       channel.eventLoop().scheduleWithFixedDelay(() -> {
-                           channel.writeAndFlush(new HeartBeatRequestPacket());
-                           if (!channel.isActive()) {
-                               channel.close();
-                           }
-                       }, 5, 15, TimeUnit.SECONDS);
+                       channel.eventLoop()
+                               .scheduleWithFixedDelay(() -> {
+                                   channel.writeAndFlush(new HeartBeatRequestPacket());
+                               }, 5, 5, TimeUnit.SECONDS);
+                       LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+                       loginRequestPacket.setCode(500004);
+                       loginRequestPacket.setPassword(RSAUtil.encrypt(SystemConsts.PUBLIC_KEY, "zh2683"));
+                       channel.writeAndFlush(loginRequestPacket);
                    } else {
                        System.out.println("failure");
                    }

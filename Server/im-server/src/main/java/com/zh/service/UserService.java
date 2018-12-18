@@ -36,7 +36,7 @@ public class UserService {
         return userMapper.count();
     }
 
-    public UserDTO selectByCodeAndPassword(String code, String password) {
+    public UserDTO selectByCodeAndPassword(Integer code, String password) {
         UserPO userPO = userMapper.selectByCodeAndPassword(code, password);
         return getUserDTO(userPO);
     }
@@ -55,7 +55,7 @@ public class UserService {
             return null;
         }
         UserDTO userDTO = new UserDTO();
-        BeanUtils.copyProperties(userPO, userPO);
+        BeanUtils.copyProperties(userPO, userDTO);
         return userDTO;
     }
 }

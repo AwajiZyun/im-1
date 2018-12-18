@@ -11,7 +11,7 @@ import org.junit.Test;
  */
 public class PacketCodecTest {
 
-    private String code = "123";
+    private Integer code = 123;
     private String password = "测试密码";
 
     @Test

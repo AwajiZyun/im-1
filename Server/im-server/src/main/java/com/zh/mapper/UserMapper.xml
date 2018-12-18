@@ -40,13 +40,13 @@
         where  `delete` = 0;
     </select>
 
-    <select id="selectByCodeAndPassword" resultType="UserPO">
+    <select id="selectByCodeAndPassword" resultMap="user">
         select <include refid="all_select_columns"/>
         from `user`
         where `code` = #{code} and `password` = #{password} and `delete` = 0;
     </select>
 
-    <select id="selectByEmail" parameterType="java.lang.String" resultType="com.zh.domain.user.UserPO">
+    <select id="selectByEmail" parameterType="java.lang.String" resultMap="user">
         select <include refid="all_select_columns"/>
         from `user`
         where email_crc32 = crc32(#{email}) and email = #{email} and `delete` = 0;
