@@ -171,7 +171,7 @@
   </dependencies>
 
   <build>
-        <finalName>im-server</finalName>
+    <finalName>im-server</finalName>
     <resources>
         <resource>
               <directory>src/main/java</directory>
@@ -179,7 +179,14 @@
                   <include>**/*.xml</include>
               </includes>
               <filtering>true</filtering>
-          </resource>
+        </resource>
+        <resource>
+            <directory>src/main/resources</directory>
+            <includes>
+                <!--包含文件夹以及子文件夹下所有资源-->
+                <include>**/*.*</include>
+            </includes>
+        </resource>
     </resources>
     <plugins>
       <plugin>
