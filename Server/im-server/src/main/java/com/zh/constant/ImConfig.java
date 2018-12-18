@@ -1,4 +1,4 @@
-package com.zh.main;
+package com.zh.constant;
 
 
 import com.zh.netty.constant.PacketTypeEnum;
@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class ImConfig {
     /**服务端口号*/
-    public static final Integer serverPort = 8080;
+    public static final Integer serverPort = 10090;
 
     /**协议魔数*/
     public static final byte[] magicNumber = new byte[]{57, 48, 48};

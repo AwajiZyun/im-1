@@ -1,9 +1,8 @@
-package com.zh.netty.server.handler;
+package com.zh.netty.handler;
 
 import com.zh.netty.protocol.Packet;
-import com.zh.netty.protocol.PacketCodec;
+import com.zh.util.PacketCodec;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

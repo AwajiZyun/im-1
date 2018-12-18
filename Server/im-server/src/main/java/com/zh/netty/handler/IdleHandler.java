@@ -1,4 +1,4 @@
-package com.zh.netty.server.handler;
+package com.zh.netty.handler;
 
 import com.zh.constant.SystemConsts;
 import io.netty.channel.ChannelHandler;
@@ -25,6 +25,7 @@ public class IdleHandler extends IdleStateHandler {
     }
 
     protected void channelIdle(ChannelHandlerContext ctx, IdleStateEvent evt) throws Exception {
+        System.out.println("空闲太久，关闭...");
         ctx.channel().close();
     }
 }

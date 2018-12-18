@@ -1,7 +1,7 @@
-package com.zh.netty.server.handler;
+package com.zh.netty.handler;
 
 import com.zh.netty.constant.AttributeKeyConsts;
-import com.zh.netty.protocol.PacketCodec;
+import com.zh.util.PacketCodec;
 import com.zh.netty.protocol.login.LoginRequestPacket;
 import com.zh.netty.protocol.login.LoginResponsePacket;
 import com.zh.service.LoginService;

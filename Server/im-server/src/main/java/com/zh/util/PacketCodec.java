@@ -1,8 +1,10 @@
-package com.zh.netty.protocol;
+package com.zh.util;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zh.constant.SystemConsts;
-import com.zh.main.ImConfig;
+import com.zh.constant.ImConfig;
+import com.zh.netty.protocol.Packet;
+import com.zh.netty.protocol.ResponsePacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 

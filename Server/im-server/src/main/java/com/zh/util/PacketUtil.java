@@ -1,6 +1,6 @@
 package com.zh.util;
 
-import com.zh.main.ImConfig;
+import com.zh.constant.ImConfig;
 import com.zh.netty.protocol.Packet;
 
 /**

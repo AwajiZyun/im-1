@@ -2,6 +2,7 @@ package com.zh.netty.protocol;
 
 import com.zh.netty.constant.PacketTypeEnum;
 import com.zh.netty.protocol.login.LoginRequestPacket;
+import com.zh.util.PacketCodec;
 import org.junit.Assert;
 import org.junit.Test;
 

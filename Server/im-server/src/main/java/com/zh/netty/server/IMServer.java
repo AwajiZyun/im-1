@@ -1,6 +1,6 @@
 package com.zh.netty.server;
 
-import com.zh.main.ImConfig;
+import com.zh.constant.ImConfig;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -52,8 +52,7 @@ public class IMServer {
     }
 
     public static void close() {
-        System.out.println("close...");
-        // TODO 优雅退出
+        // TODO 如何优雅退出？
         System.exit(1);
     }
 }

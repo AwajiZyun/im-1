@@ -1,7 +1,7 @@
 package com.zh.netty.server;
 
-import com.zh.main.SpringContextUtils;
-import com.zh.netty.server.handler.*;
+import com.zh.util.SpringContextUtils;
+import com.zh.netty.handler.*;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +28,12 @@ public class ServerChannelInitializer extends ChannelInitializer<NioSocketChanne
     @Override
     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
         nioSocketChannel.pipeline()
-//                .addLast(idleHandler)
+                .addLast(idleHandler)
                 .addLast(SpringContextUtils.getBean(PacketDecoder.class))
+                .addLast(heartBeatHandler)
                 .addLast(registerRequestHandler)
 //                .addLast(loginRequestHandler)
 //                .addLast(checkAuthHandler)
-                .addLast(new HeartBeatHandler())
                 .addLast(SpringContextUtils.getBean(PacketEncoder.class));
     }
 }

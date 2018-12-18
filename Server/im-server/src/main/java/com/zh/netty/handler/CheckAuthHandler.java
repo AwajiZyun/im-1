@@ -1,6 +1,5 @@
-package com.zh.netty.server.handler;
+package com.zh.netty.handler;
 
-import com.zh.netty.constant.AttributeKeyConsts;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

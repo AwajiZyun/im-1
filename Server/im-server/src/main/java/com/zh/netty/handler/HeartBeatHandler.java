@@ -1,4 +1,4 @@
-package com.zh.netty.server.handler;
+package com.zh.netty.handler;
 
 import com.zh.netty.protocol.hearbeat.HeartBeatRequestPacket;
 import com.zh.netty.protocol.hearbeat.HeartBeatResponsePacket;
@@ -20,6 +20,7 @@ public class HeartBeatHandler extends SimpleChannelInboundHandler<HeartBeatReque
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HeartBeatRequestPacket msg) {
+        System.out.println("客户端心跳...");
         ctx.channel().writeAndFlush(new HeartBeatResponsePacket());
     }
 
