@@ -1,1 +1,1 @@
-java -jar lib/im-server.jar 
+java -jar lib/im-server.jar &
