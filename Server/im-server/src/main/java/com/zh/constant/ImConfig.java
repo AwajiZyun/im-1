@@ -16,7 +16,7 @@ public class ImConfig {
     public static final Integer serverPort = 10090;
 
     /**协议魔数*/
-    public static final byte[] magicNumber = new byte[]{57, 48, 48};
+    public static final byte[] magicNumber = new byte[]{0x5a, 0x48, 0x48};
 
     /**每种packetType的对应类型*/
     public static final Map<Short, Class<? extends Packet>> packetTypeMap;

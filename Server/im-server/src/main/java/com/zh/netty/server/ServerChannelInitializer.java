@@ -2,12 +2,9 @@ package com.zh.netty.server;
 
 import com.zh.util.SpringContextUtils;
 import com.zh.netty.handler.*;
-import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.timeout.IdleStateHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;

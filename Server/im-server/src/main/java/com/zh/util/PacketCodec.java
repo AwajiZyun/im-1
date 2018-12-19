@@ -7,14 +7,16 @@ import com.zh.netty.protocol.ResponsePacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.util.CharsetUtil;
-
-import java.nio.charset.Charset;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 编解码
  * @author zh2683
  */
 public class PacketCodec {
+
+    private static final Logger logger = LoggerFactory.getLogger(PacketCodec.class);
 
     /**
      * 编码
@@ -71,5 +73,4 @@ public class PacketCodec {
         byteBuf.writeBytes(dataBytes);
         return byteBuf;
     }
-
 }

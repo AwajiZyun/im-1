@@ -1,12 +1,9 @@
 package com.zh.util;
 
-import com.zh.constant.SystemConsts;
-import org.apache.commons.io.IOUtils;
+import io.netty.util.CharsetUtil;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Objects;
@@ -33,7 +30,7 @@ public class Base64Util {
     }
 
     public static String encrypt(String source) {
-        return encrypt(source, SystemConsts.ENCODING_UTF8);
+        return encrypt(source, CharsetUtil.UTF_8.name());
     }
 
     private static String decrypt(String base64_source, String charsetName) {
@@ -47,7 +44,7 @@ public class Base64Util {
     }
 
     public static String decrypt(String base64_source) {
-        return decrypt(base64_source, SystemConsts.ENCODING_UTF8);
+        return decrypt(base64_source, CharsetUtil.UTF_8.name());
     }
 
 }

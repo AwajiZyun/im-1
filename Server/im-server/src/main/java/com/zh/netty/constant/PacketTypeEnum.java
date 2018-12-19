@@ -16,8 +16,8 @@ public enum  PacketTypeEnum {
     register_response((short)0x1000, RegisterResponsePacket.class),
     login_request((short)0x0001, LoginRequestPacket.class),
     login_response((short)0x1001, LoginResponsePacket.class),
-    heartbeat_request((short)0x10f0, HeartBeatRequestPacket.class),
-    heartbeat_response((short)0x00f0, HeartBeatResponsePacket.class),
+    heartbeat_request((short)0x00f0, HeartBeatRequestPacket.class),
+    heartbeat_response((short)0x10f0, HeartBeatResponsePacket.class),
     ;
 
     private Short code;

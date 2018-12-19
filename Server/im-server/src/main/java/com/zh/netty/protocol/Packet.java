@@ -9,7 +9,7 @@ import lombok.Data;
  *
  * magic: 魔数,3byte
  * procotolVersion: 协议版本,1byte
- * totalLen:数据区长度,4byte
+ * dataLen:数据区长度,4byte
  * msgType: 包类型,2byte
  * blankRegion: 预留, 6byte
  * data: 数据区....
