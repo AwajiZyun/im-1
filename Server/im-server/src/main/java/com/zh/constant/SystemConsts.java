@@ -5,8 +5,6 @@ package com.zh.constant;
  */
 public interface SystemConsts {
 
-    String ENCODING_UTF8 = "UTF-8";
-
     /**
      * 公钥
      */

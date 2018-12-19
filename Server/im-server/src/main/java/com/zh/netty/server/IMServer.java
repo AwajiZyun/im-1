@@ -29,7 +29,7 @@ public class IMServer {
     @Autowired
     private ChannelInitializer channelInitializer;
 
-    public synchronized void start() {
+    public synchronized void start() throws InterruptedException {
         if (serverBootstrap == null) {
             serverBootstrap = new ServerBootstrap();
             serverBootstrap
@@ -40,7 +40,7 @@ public class IMServer {
         }
     }
 
-    private void bind(ServerBootstrap serverBootstrap, final Integer port) {
+    private void bind(ServerBootstrap serverBootstrap, final Integer port) throws InterruptedException {
         serverBootstrap.bind(port).addListener(future -> {
            if (future.isSuccess()) {
                logger.info("端口: [" + port + "]绑定成功");
@@ -48,11 +48,11 @@ public class IMServer {
                logger.error("端口:[" + port + "]绑定失败");
                close();
            }
-        });
+        }).sync();
     }
 
     public static void close() {
-        // TODO 如何优雅退出？
-        System.exit(1);
+        worker.shutdownGracefully();
+        boss.shutdownGracefully();
     }
 }

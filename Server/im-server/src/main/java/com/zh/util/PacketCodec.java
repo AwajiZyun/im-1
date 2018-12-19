@@ -1,12 +1,12 @@
 package com.zh.util;
 
 import com.alibaba.fastjson.JSONObject;
-import com.zh.constant.SystemConsts;
 import com.zh.constant.ImConfig;
 import com.zh.netty.protocol.Packet;
 import com.zh.netty.protocol.ResponsePacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
+import io.netty.util.CharsetUtil;
 
 import java.nio.charset.Charset;
 
@@ -40,7 +40,7 @@ public class PacketCodec {
         Class<? extends Packet> packetClazz = ImConfig.packetTypeMap.get(packetType);
         byte[] data = new byte[dataLength];
         byteBuf.readBytes(data);
-        Packet packet = JSONObject.parseObject(new String(data, Charset.forName(SystemConsts.ENCODING_UTF8)), packetClazz);
+        Packet packet = JSONObject.parseObject(new String(data, CharsetUtil.UTF_8), packetClazz);
         return packet;
     }
 
@@ -55,7 +55,7 @@ public class PacketCodec {
 
     private static ByteBuf getResponseByteBuf(Packet responsePacket) {
         String data = JSONObject.toJSONString(responsePacket);
-        byte[] dataBytes = data.getBytes(Charset.forName(SystemConsts.ENCODING_UTF8));
+        byte[] dataBytes = data.getBytes(CharsetUtil.UTF_8);
         ByteBuf byteBuf = ByteBufAllocator.DEFAULT.buffer();
         // 魔数
         byteBuf.writeBytes(ImConfig.magicNumber);
