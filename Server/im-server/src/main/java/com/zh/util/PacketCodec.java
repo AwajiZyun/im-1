@@ -40,7 +40,7 @@ public class PacketCodec {
         Class<? extends Packet> packetClazz = ImConfig.packetTypeMap.get(packetType);
         byte[] data = new byte[dataLength];
         byteBuf.readBytes(data);
-        Packet packet = JSONObject.parseObject(new String(data, Charset.forName("utf-8")), packetClazz);
+        Packet packet = JSONObject.parseObject(new String(data, Charset.forName(SystemConsts.ENCODING_UTF8)), packetClazz);
         return packet;
     }
 

@@ -17,7 +17,9 @@ public class PacketUtil {
      * @return
      */
     public static boolean checkMagicNumber(byte[] magicNumber) {
-        if (magicNumber.length < 3) return false;
+        if (magicNumber.length < 3) {
+            return false;
+        }
         byte[] magicNumberDefault = ImConfig.magicNumber;
         return magicNumberDefault[0] == magicNumber[0]
                 && magicNumberDefault[1] == magicNumber[1]

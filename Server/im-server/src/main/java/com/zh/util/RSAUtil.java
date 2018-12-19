@@ -18,15 +18,15 @@ import java.util.Map;
  * RSA算法，实现数据的加密解密。 
  */
 public class RSAUtil {
-	private static Cipher cipher;  
+	private static Cipher cipher;
     
-    static{  
-        try {  
-            cipher = Cipher.getInstance("RSA");  
+    static{
+        try {
+            cipher = Cipher.getInstance("RSA");
         } catch (NoSuchAlgorithmException e) {  
-            e.printStackTrace();  
+            e.printStackTrace();
         } catch (NoSuchPaddingException e) {  
-            e.printStackTrace();  
+            e.printStackTrace();
         }  
     }
 
@@ -60,47 +60,47 @@ public class RSAUtil {
         return null;
     }
 
-    /** 
-     * 得到公钥 
-     *  
+    /**
+     * 得到公钥
+     *
      * @param key 
-     *            密钥字符串（经过base64编码） 
-     * @throws Exception 
-     */  
-    public static PublicKey getPublicKey(String key) throws Exception {  
-        byte[] keyBytes;  
-        keyBytes = (new BASE64Decoder()).decodeBuffer(key);  
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);  
+     *            密钥字符串（经过base64编码
+     * @throws Exception
+     */
+    public static PublicKey getPublicKey(String key) throws Exception {
+        byte[] keyBytes;
+        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         PublicKey publicKey = keyFactory.generatePublic(keySpec);
-        return publicKey;  
+        return publicKey;
     }  
       
     /** 
-     * 得到私钥 
-     *  
-     * @param key 
+     * 得到私钥
+     *
+     * @param key
      *            密钥字符串（经过base64编码） 
      * @throws Exception 
      */  
-    public static PrivateKey getPrivateKey(String key) throws Exception {  
-        byte[] keyBytes;  
-        keyBytes = (new BASE64Decoder()).decodeBuffer(key);  
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);  
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");  
-        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);  
-        return privateKey;  
+    public static PrivateKey getPrivateKey(String key) throws Exception {
+        byte[] keyBytes;
+        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+        return privateKey;
     }
     
     /** 
-     * 得到密钥字符串（经过base64编码） 
-     *  
-     * @return 
+     * 得到密钥字符串（经过base64编码
+     *
+     * @return
      */  
-    public static String getKeyString(Key key) throws Exception {  
-        byte[] keyBytes = key.getEncoded();  
-        String s = (new BASE64Encoder()).encode(keyBytes);  
-        return s;  
+    public static String getKeyString(Key key) throws Exception {
+        byte[] keyBytes = key.getEncoded();
+        String s = (new BASE64Encoder()).encode(keyBytes);
+        return s;
     }
     
     /** 
@@ -117,9 +117,9 @@ public class RSAUtil {
         } catch (InvalidKeyException e) {  
             e.printStackTrace();  
         } catch (IllegalBlockSizeException e) {  
-            e.printStackTrace();  
+            e.printStackTrace();
         } catch (BadPaddingException e) {  
-            e.printStackTrace();  
+            e.printStackTrace();
         }  
         return null;  
     }  
@@ -130,20 +130,20 @@ public class RSAUtil {
      * @param plainText      明文 
      * @return 
      */  
-    public static String encrypt(String publicKey, String plainText){  
-        try {              
-            cipher.init(Cipher.ENCRYPT_MODE,getPublicKey(publicKey));  
-            byte[] enBytes = cipher.doFinal(plainText.getBytes());            
-            return (new BASE64Encoder()).encode(enBytes);  
-        } catch (InvalidKeyException e) {  
-            e.printStackTrace();  
-        } catch (IllegalBlockSizeException e) {  
-            e.printStackTrace();  
-        } catch (BadPaddingException e) {  
-            e.printStackTrace();  
-        } catch (Exception e) {  
-            e.printStackTrace();  
-        }  
+    public static String encrypt(String publicKey, String plainText){
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE,getPublicKey(publicKey));
+            byte[] enBytes = cipher.doFinal(plainText.getBytes());
+            return (new BASE64Encoder()).encode(enBytes);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return null;  
     } 
       
@@ -153,23 +153,23 @@ public class RSAUtil {
      * @param enStr            密文 
      * @return 
      */  
-    public static String decrypt(String privateKey, String enStr){  
-        try {           
-            cipher.init(Cipher.DECRYPT_MODE, getPrivateKey(privateKey));  
-            byte[] deBytes = cipher.doFinal((new BASE64Decoder()).decodeBuffer(enStr));  
-            return new String(deBytes);  
-        } catch (InvalidKeyException e) {  
-            e.printStackTrace();  
-        } catch (IllegalBlockSizeException e) {  
-            e.printStackTrace();  
-        } catch (BadPaddingException e) {  
-            e.printStackTrace();  
-        } catch (IOException e) {  
-            e.printStackTrace();  
-        } catch (Exception e) {  
-            e.printStackTrace();  
-        }  
-        return null;  
+    public static String decrypt(String privateKey, String enStr){
+        try {
+            cipher.init(Cipher.DECRYPT_MODE, getPrivateKey(privateKey));
+            byte[] deBytes = cipher.doFinal((new BASE64Decoder()).decodeBuffer(enStr));
+            return new String(deBytes);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
