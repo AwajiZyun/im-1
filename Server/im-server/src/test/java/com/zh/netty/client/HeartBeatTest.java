@@ -41,14 +41,14 @@ public class HeartBeatTest {
         bootstrap.connect("127.0.0.1", ImConfig.serverPort)
                 .addListener(future -> {
                    if (future.isSuccess()) {
-                       HeartBeatRequestPacket heartBeatRequestPacket = new HeartBeatRequestPacket();
                        Channel channel = ((ChannelFuture)future).channel();
                        channel.eventLoop().scheduleWithFixedDelay(() -> {
-                           channel.writeAndFlush(new HeartBeatRequestPacket());
+                           HeartBeatRequestPacket heartBeatRequestPacket1 = new HeartBeatRequestPacket();
+                           channel.writeAndFlush(heartBeatRequestPacket1);
                            if (!channel.isActive()) {
                                channel.close();
                            }
-                       }, 5, 15, TimeUnit.SECONDS);
+                       }, 5, 7, TimeUnit.SECONDS);
                    } else {
                        System.out.println("failure");
                    }

@@ -4,10 +4,13 @@ import com.zh.constant.SystemConsts;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -18,24 +21,25 @@ import java.util.concurrent.TimeUnit;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class IdleHandler extends IdleStateHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(IdleHandler.class);
+
     public IdleHandler() {
         super(SystemConsts.CHANNEL_IDLE_TIME, 0, 0, TimeUnit.SECONDS);
     }
 
     protected void channelIdle(ChannelHandlerContext ctx, IdleStateEvent evt) throws Exception {
-        System.out.println("空闲时间过长，关闭次此连接...");
+        InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
+        logger.info(String.format("%s空闲时间过长，连接关闭", socketAddress.getHostString()));
         ctx.channel().close();
     }
 
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("idleHandler被添加");
         super.handlerAdded(ctx);
     }
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("idleHandler被移除");
         super.handlerRemoved(ctx);
     }
 }

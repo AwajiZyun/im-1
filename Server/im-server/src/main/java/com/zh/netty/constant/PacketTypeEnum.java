@@ -12,12 +12,12 @@ import com.zh.netty.protocol.register.RegisterResponsePacket;
  * @author zh2683
  */
 public enum  PacketTypeEnum {
-    login_request((short)1, LoginRequestPacket.class),
-    login_response((short)2, LoginResponsePacket.class),
-    register_request((short)3, RegisterRequestPacket.class),
-    register_response((short)4, RegisterResponsePacket.class),
-    heartbeat_request((short)5, HeartBeatRequestPacket.class),
-    heartbeat_response((short)6, HeartBeatResponsePacket.class),
+    register_request((short)0x0000, RegisterRequestPacket.class),
+    register_response((short)0x1000, RegisterResponsePacket.class),
+    login_request((short)0x0001, LoginRequestPacket.class),
+    login_response((short)0x1001, LoginResponsePacket.class),
+    heartbeat_request((short)0x10f0, HeartBeatRequestPacket.class),
+    heartbeat_response((short)0x00f0, HeartBeatResponsePacket.class),
     ;
 
     private Short code;

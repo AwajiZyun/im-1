@@ -5,10 +5,13 @@ import com.zh.util.PacketUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 
 /**
@@ -18,6 +21,8 @@ import java.util.List;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class PacketDecoder extends ByteToMessageDecoder {
+
+    private static final Logger logger = LoggerFactory.getLogger(PacketDecoder.class);
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
@@ -35,7 +40,9 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        cause.printStackTrace();
+        InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
+        logger.error(String.format("%s,数据包解码失败", socketAddress.getHostString()), cause);
+        ctx.channel().close();
     }
 
 }

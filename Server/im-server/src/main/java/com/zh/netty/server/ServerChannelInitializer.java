@@ -2,6 +2,7 @@ package com.zh.netty.server;
 
 import com.zh.util.SpringContextUtils;
 import com.zh.netty.handler.*;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
@@ -32,6 +33,7 @@ public class ServerChannelInitializer extends ChannelInitializer<NioSocketChanne
     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
         nioSocketChannel.pipeline()
                 .addLast(SpringContextUtils.getBean(IdleHandler.class))
+                .addLast(SpringContextUtils.getBean(LengthFieldDecoder.class))
                 .addLast(SpringContextUtils.getBean(PacketDecoder.class))
                 .addLast(heartBeatHandler)
                 .addLast(registerRequestHandler)

@@ -16,10 +16,15 @@ public class ServerStarter {
     private static final Logger logger = LoggerFactory.getLogger(ServerStarter.class);
 
     public static void main(String[] args) {
-        // 初始化spring, mybatis
-        SpringContextUtils.init();
-        // 启动netty
-        IMServer imServer = SpringContextUtils.getBean(IMServer.class);
-        imServer.start();
+        try {
+            // 初始化spring, mybatis
+            SpringContextUtils.init();
+            // 启动netty
+            IMServer imServer = SpringContextUtils.getBean(IMServer.class);
+            imServer.start();
+            logger.info("启动完成");
+        } catch (Exception e) {
+            logger.error("im启动失败", e);
+        }
     }
 }
