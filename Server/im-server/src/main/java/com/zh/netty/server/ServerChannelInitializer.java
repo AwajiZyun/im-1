@@ -29,7 +29,7 @@ public class ServerChannelInitializer extends ChannelInitializer<NioSocketChanne
     @Override
     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
         nioSocketChannel.pipeline()
-                .addLast(SpringContextUtils.getBean(IdleHandler.class))
+//                .addLast(SpringContextUtils.getBean(IdleHandler.class))
                 .addLast(SpringContextUtils.getBean(LengthFieldDecoder.class))
                 .addLast(SpringContextUtils.getBean(PacketDecoder.class))
                 .addLast(heartBeatHandler)
