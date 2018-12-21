@@ -4,7 +4,8 @@
         "code": "xxxxxx",
         "email": "zh@163.com",
         "nickname": "zh",
-        "sex": 1
+        "sex": 1,
+		"status": 1
     },
     "msg": null
 }
