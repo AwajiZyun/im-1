@@ -40,7 +40,7 @@ public class LoginTest {
                                 .pipeline()
                                 .addLast(new PacketDecoder())
                                 .addLast(new TestLoginResponseHandler())
-                                .addLast(new TestHeartResponseHandler())
+//                                .addLast(new TestHeartResponseHandler())
                                 .addLast(new PacketEncoder());
                     }
                 });
@@ -48,12 +48,12 @@ public class LoginTest {
                 .addListener(future -> {
                    if (future.isSuccess()) {
                        Channel channel = ((ChannelFuture)future).channel();
-                       channel.eventLoop()
-                               .scheduleWithFixedDelay(() -> {
-                                   channel.writeAndFlush(new HeartBeatRequestPacket());
-                               }, 5, 5, TimeUnit.SECONDS);
+//                       channel.eventLoop()
+//                               .scheduleWithFixedDelay(() -> {
+//                                   channel.writeAndFlush(new HeartBeatRequestPacket());
+//                               }, 5, 5, TimeUnit.SECONDS);
                        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-                       loginRequestPacket.setCode(500004);
+                       loginRequestPacket.setCode("500000");
                        loginRequestPacket.setPassword(RSAUtil.encrypt(SystemConsts.PUBLIC_KEY, "zh2683"));
                        channel.writeAndFlush(loginRequestPacket);
                    } else {

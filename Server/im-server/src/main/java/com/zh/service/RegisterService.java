@@ -31,7 +31,7 @@ public class RegisterService {
     @Transactional
     public RegisterResponsePacket register(RegisterRequestPacket registerRequestPacket) {
         RegisterResponsePacket registerResponsePacket = new RegisterResponsePacket();
-        Integer code = null;
+        String code = null;
         try {
             UserDTO userDTO = userService.selectByEmail(registerRequestPacket.getEmail());
             if (userDTO == null) {
@@ -45,7 +45,7 @@ public class RegisterService {
                 userPO.setCreateTime(new Date());
                 userPO.setDelete(false);
                 // TODO 这里要检测队列长度,然后在号码短缺时自动增长
-                code = Integer.valueOf(redisService.lpop(SystemConsts.RAW_CODE_POOL));
+                code = redisService.lpop(SystemConsts.RAW_CODE_POOL);
                 userPO.setCode(code);
                 userService.save(userPO);
                 registerResponsePacket.setMsg("注册成功");

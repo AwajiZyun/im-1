@@ -43,10 +43,10 @@ public class RegisterTest {
                    if (future.isSuccess()) {
                        System.out.println("success");
                        RegisterRequestPacket registerRequestPacket = new RegisterRequestPacket();
-                       registerRequestPacket.setPassword(RSAUtil.encrypt(SystemConsts.PUBLIC_KEY, "zh2683"));
-                       registerRequestPacket.setEmail("zh2683@133.com");
+                       registerRequestPacket.setPassword(RSAUtil.encrypt(SystemConsts.PUBLIC_KEY, "zh26831"));
+                       registerRequestPacket.setEmail("zh26831@163.com");
                        registerRequestPacket.setSex(SexEnum.FEMALE);
-                       registerRequestPacket.setNickname("zh2683");
+                       registerRequestPacket.setNickname("zh26831");
                        ((ChannelFuture)future).channel().writeAndFlush(registerRequestPacket);
                    } else {
                        System.out.println("failure");

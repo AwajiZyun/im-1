@@ -36,7 +36,7 @@ public class UserService {
         return userMapper.count();
     }
 
-    public UserDTO selectByCodeAndPassword(Integer code, String password) {
+    public UserDTO selectByCodeAndPassword(String code, String password) {
         UserPO userPO = userMapper.selectByCodeAndPassword(code, password);
         return getUserDTO(userPO);
     }

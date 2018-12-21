@@ -14,7 +14,7 @@ public class TestLoginResponseHandler extends SimpleChannelInboundHandler<LoginR
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginResponsePacket msg) throws Exception {
-        System.out.println(JSON.toJSON(msg));
+        System.out.println(JSON.toJSONString(msg));
         if (ctx.channel().hasAttr(AttributeKeyConsts.login)) {
             System.out.println(ctx.channel().attr(AttributeKeyConsts.login).get());
         }

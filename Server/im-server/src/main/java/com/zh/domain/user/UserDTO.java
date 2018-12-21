@@ -13,7 +13,7 @@ public class UserDTO {
     // 主键
     private String id;
     // im号,唯一
-    private Integer code;
+    private String code;
     // 邮箱, 唯一
     private String email;
     // 昵称
