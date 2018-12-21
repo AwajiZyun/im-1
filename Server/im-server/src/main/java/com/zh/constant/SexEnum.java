@@ -8,9 +8,9 @@ import java.util.Map;
  * @author zh2683
  */
 public enum SexEnum {
-    MALE(0, "男"),
-    FEMALE(1, "女"),
-    OTHER(2, "其他");
+    MALE("男"),
+    FEMALE("女"),
+    OTHER("其他");
 
     private static final Map<Integer, SexEnum> sexMap = new HashMap<>();
 
@@ -20,16 +20,13 @@ public enum SexEnum {
         }
     }
 
-    private Integer index;
     private String desc;
 
-    SexEnum(Integer sex, String desc) {
-        this.index = sex;
+    SexEnum(String desc) {
         this.desc = desc;
     }
 
     public static SexEnum getEnum(Integer index) {
         return sexMap.get(index);
     }
-
 }

@@ -2,6 +2,7 @@ package com.zh.main;
 
 import com.zh.netty.server.IMServer;
 import com.zh.util.SpringContextUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,9 +12,8 @@ import org.slf4j.LoggerFactory;
  * 启动netty服务
  * @author zh2683
  */
+@Slf4j
 public class ServerStarter {
-
-    private static final Logger logger = LoggerFactory.getLogger(ServerStarter.class);
 
     public static void main(String[] args) {
         try {
@@ -22,9 +22,9 @@ public class ServerStarter {
             // 启动netty
             IMServer imServer = SpringContextUtils.getBean(IMServer.class);
             imServer.start();
-            logger.info("启动完成");
+            log.info("启动完成");
         } catch (Exception e) {
-            logger.error("im启动失败", e);
+            log.error("im启动失败", e);
         }
     }
 }

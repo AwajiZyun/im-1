@@ -5,6 +5,7 @@ import com.zh.util.PacketUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -18,6 +19,7 @@ import java.util.List;
  * 消息解码器
  * @author zh2683
  */
+@Slf4j
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class PacketDecoder extends ByteToMessageDecoder {
@@ -41,7 +43,7 @@ public class PacketDecoder extends ByteToMessageDecoder {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
-        logger.error(String.format("%s,数据包解码失败", socketAddress.getHostString()), cause);
+        log.error(String.format("%s,数据包解码失败", socketAddress.getHostString()), cause);
         ctx.channel().close();
     }
 

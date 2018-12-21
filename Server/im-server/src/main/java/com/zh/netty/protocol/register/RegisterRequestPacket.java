@@ -1,8 +1,10 @@
 package com.zh.netty.protocol.register;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.zh.constant.SexEnum;
 import com.zh.netty.constant.PacketTypeEnum;
 import com.zh.netty.protocol.Packet;
+import com.zh.util.SexEnumCodec;
 import lombok.Data;
 
 /**
@@ -15,7 +17,8 @@ public class RegisterRequestPacket extends Packet {
 
     private String nickname;
 
-    private SexEnum sexEnum;
+    @JSONField(serializeUsing = SexEnumCodec.class, deserializeUsing = SexEnumCodec.class)
+    private SexEnum sex;
 
     private String password;
 

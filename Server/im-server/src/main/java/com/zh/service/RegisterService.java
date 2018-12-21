@@ -39,7 +39,7 @@ public class RegisterService {
                 userPO.setId(UUID.randomUUID().toString().replaceAll("-", ""));
                 userPO.setEmail(registerRequestPacket.getEmail());
                 userPO.setNickname(registerRequestPacket.getNickname());
-                userPO.setSex(registerRequestPacket.getSexEnum());
+                userPO.setSex(registerRequestPacket.getSex());
                 String password = DigestUtils.md5Hex(RSAUtil.decrypt(SystemConsts.PRIVATE_KEY, registerRequestPacket.getPassword()));
                 userPO.setPassword(password);
                 userPO.setCreateTime(new Date());
