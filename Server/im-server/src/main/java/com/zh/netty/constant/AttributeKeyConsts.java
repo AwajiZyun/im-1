@@ -15,4 +15,8 @@ public interface AttributeKeyConsts {
      * 登陆后channel标记属性
      */
     AttributeKey<Boolean> login = AttributeKey.newInstance("login");
+    /**
+     * 登陆后channel标记code属性
+     */
+    AttributeKey<String> code = AttributeKey.newInstance("code");
 }

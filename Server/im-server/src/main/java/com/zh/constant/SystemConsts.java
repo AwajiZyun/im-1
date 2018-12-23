@@ -40,4 +40,9 @@ public interface SystemConsts {
      * 空闲时间
      */
     Integer CHANNEL_IDLE_TIME = 10;
+
+    /**
+     * redis中存储在线状态的键前缀
+     */
+    String ONLINE_STATE_PREFIX = "online_state_";
 }

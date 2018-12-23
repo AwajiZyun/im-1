@@ -25,4 +25,16 @@ public class RedisService {
     public Long rpush(String key, String value) {
         return redisTemplate.opsForList().rightPush(key, value);
     }
+
+    public void set(String key, String value) {
+        redisTemplate.opsForValue().set(key, value);
+    }
+
+    public String get(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+
+    public Boolean delete(String key) {
+        return redisTemplate.delete(key);
+    }
 }

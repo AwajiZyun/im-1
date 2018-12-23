@@ -2,6 +2,7 @@ package com.zh.netty.handler;
 
 import com.zh.netty.protocol.hearbeat.HeartBeatRequestPacket;
 import com.zh.netty.protocol.hearbeat.HeartBeatResponsePacket;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

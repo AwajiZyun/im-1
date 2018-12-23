@@ -1,6 +1,8 @@
 package com.zh.netty.handler;
 
 import com.zh.netty.constant.AttributeKeyConsts;
+import com.zh.service.OnlineStateService;
+import com.zh.service.RedisService;
 import com.zh.util.PacketCodec;
 import com.zh.netty.protocol.login.LoginRequestPacket;
 import com.zh.netty.protocol.login.LoginResponsePacket;
@@ -33,12 +35,20 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private OnlineStateService onlineStateService;
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket msg) throws Exception {
         LoginResponsePacket loginResponsePacket = loginService.login(msg);
         if (loginResponsePacket.getSuccess()) {
             log.info(String.format("%s登录成功", msg.getCode()));
+            // 标记登录
             ctx.channel().attr(AttributeKeyConsts.login).set(true);
+            // 记录code
+            ctx.channel().attr(AttributeKeyConsts.code).set(loginResponsePacket.getData().getCode());
+            // 增加在线状态
+            onlineStateService.online(loginResponsePacket.getData().getCode());
             // 登录后增加空闲检测
             ctx.pipeline().addFirst(SpringContextUtils.getBean(IdleHandler.class));
         }
