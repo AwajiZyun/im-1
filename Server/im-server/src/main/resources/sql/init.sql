@@ -15,3 +15,14 @@ create table user(
 ) engine=innodb;
 
 alter table user add index i_email_crc32(email_crc32);
+
+-- zh2683 2018-12-24 好友关系表
+drop table if exists friends;
+create table friends(
+  id varchar(32) not null,
+  userCode varchar(20) not null,
+  friendCode varchar(20) not null,
+  createTime datetime not null,
+  unique index ui_uc_fc(userCode, friendCode),
+  index i_fc(friendCode)
+) engine=innodb;

@@ -2,53 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zh.mapper.FriendsMapper">
-    <resultMap id="user" type="com.zh.domain.user.UserPO">
+    <resultMap id="friend" type="com.zh.domain.friend.FriendsPO">
         <id column="id" property="id" javaType="java.lang.String" jdbcType="VARCHAR"/>
-        <result column="code" property="code" javaType="java.lang.String" jdbcType="VARCHAR"/>
-        <result column="email" property="email" javaType="java.lang.String" jdbcType="VARCHAR"/>
-        <result column="nickname" property="nickname" javaType="java.lang.String" jdbcType="VARCHAR"/>
-        <result column="password" property="password" javaType="java.lang.String" jdbcType="VARCHAR"/>
-        <result column="sex" property="sex" javaType="com.zh.constant.SexEnum" jdbcType="INTEGER"
-                typeHandler="org.apache.ibatis.type.EnumOrdinalTypeHandler"/>
-        <result column="delete" property="delete" javaType="java.lang.Boolean" jdbcType="INTEGER"
-                typeHandler="org.apache.ibatis.type.BooleanTypeHandler"/>
+        <result column="userCode" property="userCode" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result column="friendCode" property="friendCode" javaType="java.lang.String" jdbcType="VARCHAR"/>
         <result column="createTime" property="createTime" javaType="java.util.Date" jdbcType="DATE"/>
-        <result column="modifyTime" property="modifyTime" javaType="java.util.Date" jdbcType="DATE"/>
     </resultMap>
 
-    <sql id="all_select_columns">id, `code`, email, nickname, `password`, sex, `delete`, createTime, modifyTime</sql>
+    <sql id="all_column_list">id, userCode, friendCode, createTime</sql>
 
-    <sql id="all_insert_columns">id, `code`, email, email_crc32, nickname, `password`, sex, `delete`, createTime, modifyTime</sql>
-
-    <insert id="save" parameterType="UserPO">
-        insert into `user`(<include refid="all_insert_columns"/>)
-        values (#{id}, #{code}, #{email}, crc32(#{email}),
-                #{nickname}, #{password},
-                #{sex, typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},
-                #{delete}, #{createTime}, #{modifyTime})
+    <!--插入需要保证userCode < friendCode-->
+    <insert id="save" parameterType="FriendsPO">
+        insert into friends(<include refid="all_column_list">)
+        values(#{id}, #{userFriend}, #{friendCode}, #{createTime});
     </insert>
 
-    <select id="listAll" resultMap="user">
-        select <include refid="all_select_columns"/>
-        from user
-        where `delete` = 0;
-    </select>
-
-    <select id="count" resultType="java.lang.Integer">
-        select count(*)
-        from `user`
-        where  `delete` = 0;
-    </select>
-
-    <select id="selectByCodeAndPassword" resultMap="user">
-        select <include refid="all_select_columns"/>
-        from `user`
-        where `code` = #{code} and `password` = #{password} and `delete` = 0;
-    </select>
-
-    <select id="selectByEmail" parameterType="java.lang.String" resultMap="user">
-        select <include refid="all_select_columns"/>
-        from `user`
-        where email_crc32 = crc32(#{email}) and email = #{email} and `delete` = 0;
+    <select id="selectByCode" parameterType="java.lang.String" resultMap="friend">
+        select <include refid="all_column_list">
+        from friends
+        where userCode = #{code}
+        union all
+        select <include refid="all_column_list">
+        from friends
+        where friendCode = #{code}
     </select>
 </mapper>
