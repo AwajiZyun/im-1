@@ -40,6 +40,18 @@
         where  `delete` = 0;
     </select>
 
+    <select id="selectByCode" parameterType="java.lang.String" resultMap="user">
+        select <include refid="all_select_columns"/>
+        from `user`
+        where `code` = #{code} and `delete` = 0;
+    </select>
+
+    <select id="selectByCodeOrEmail" parameterType="java.lang.String" resultMap="user">
+        select <include refid="all_select_columns"/>
+        from `user`
+        where (`code` = #{code} or `email` = #{email}) and `delete` = 0;
+    </select>
+
     <select id="selectByCodeAndPassword" resultMap="user">
         select <include refid="all_select_columns"/>
         from `user`

@@ -1,5 +1,6 @@
 package com.zh.netty.server;
 
+import com.zh.netty.protocol.friend.AddFriendRequestPacket;
 import com.zh.util.SpringContextUtils;
 import com.zh.netty.handler.*;
 import io.netty.channel.ChannelInitializer;
@@ -25,6 +26,8 @@ public class ServerChannelInitializer extends ChannelInitializer<NioSocketChanne
     private HeartBeatHandler heartBeatHandler;
     @Autowired
     private CheckAuthHandler checkAuthHandler;
+    @Autowired
+    private AddFriendHandler addFriendHandler;
 
     @Override
     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
@@ -36,6 +39,7 @@ public class ServerChannelInitializer extends ChannelInitializer<NioSocketChanne
                 .addLast(registerRequestHandler)
                 .addLast(loginRequestHandler)
                 .addLast(checkAuthHandler)
+                .addLast(addFriendHandler)
                 .addLast(SpringContextUtils.getBean(PacketEncoder.class));
     }
 }

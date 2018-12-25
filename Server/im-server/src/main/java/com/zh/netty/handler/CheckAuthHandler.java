@@ -30,6 +30,7 @@ public class CheckAuthHandler extends ChannelInboundHandlerAdapter {
         }
         if (ctx.channel().hasAttr(AttributeKeyConsts.login)) {
             ctx.pipeline().remove(this);
+            ctx.fireChannelRead(msg);
         } else {
             ctx.channel().close();
         }

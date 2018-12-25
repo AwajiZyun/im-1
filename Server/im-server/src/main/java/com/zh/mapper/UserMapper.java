@@ -16,6 +16,8 @@ public interface UserMapper {
 
     Integer count();
 
+    UserPO selectByCodeOrEmail(@Param("code") String code, @Param("email") String email);
+
     UserPO selectByCodeAndPassword(@Param("code") String code, @Param("password") String password);
 
     UserPO selectByEmail(String email);

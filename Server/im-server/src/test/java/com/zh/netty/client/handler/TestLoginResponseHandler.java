@@ -2,7 +2,6 @@ package com.zh.netty.client.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.zh.netty.constant.AttributeKeyConsts;
-import com.zh.netty.protocol.hearbeat.HeartBeatRequestPacket;
 import com.zh.netty.protocol.login.LoginResponsePacket;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

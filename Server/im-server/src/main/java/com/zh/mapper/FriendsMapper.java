@@ -8,5 +8,7 @@ public interface FriendsMapper {
 
     void save(FriendsPO friendsPO);
 
+    FriendsPO select(FriendsPO friendsPO);
+
     List<FriendsPO> selectByCode(String code);
 }

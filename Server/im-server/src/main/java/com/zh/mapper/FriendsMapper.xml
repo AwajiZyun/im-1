@@ -13,17 +13,23 @@
 
     <!--插入需要保证userCode < friendCode-->
     <insert id="save" parameterType="FriendsPO">
-        insert into friends(<include refid="all_column_list">)
-        values(#{id}, #{userFriend}, #{friendCode}, #{createTime});
+        insert into friends(<include refid="all_column_list"/>)
+        values(#{id}, #{userCode}, #{friendCode}, #{createTime});
     </insert>
 
     <select id="selectByCode" parameterType="java.lang.String" resultMap="friend">
-        select <include refid="all_column_list">
+        select <include refid="all_column_list"/>
         from friends
         where userCode = #{code}
         union all
-        select <include refid="all_column_list">
+        select <include refid="all_column_list"/>
         from friends
         where friendCode = #{code}
+    </select>
+
+    <select id="select" parameterType="FriendsPO" resultMap="friend">
+        select <include refid="all_column_list"/>
+        from  friends
+        where userCode = #{userCode} and friendCode = #{friendCode}
     </select>
 </mapper>
