@@ -40,6 +40,16 @@
         where  `delete` = 0;
     </select>
 
+    <select id="listByCode" parameterType="java.util.List" resultMap="user">
+        select <include refid="all_select_columns"/>
+        from `user`
+        where `code` in 
+        <foreach collection="list" item="item" index="index"
+            open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
     <select id="selectByCode" parameterType="java.lang.String" resultMap="user">
         select <include refid="all_select_columns"/>
         from `user`

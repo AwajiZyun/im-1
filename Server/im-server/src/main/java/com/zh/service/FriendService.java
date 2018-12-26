@@ -13,14 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author zh2683
  */
 @Service
-public class AddFriendService {
+public class FriendService {
 
     @Autowired
     private FriendsMapper friendsMapper;
@@ -55,5 +54,25 @@ public class AddFriendService {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(userPO, userDTO);
         return userDTO;
+    }
+
+    public List<UserDTO> listFriends(String code) {
+        List<FriendsPO> friendsPOS = friendsMapper.selectByCode(code);
+        List<String> friendCodes = new ArrayList<>(friendsPOS.size());
+        friendsPOS.stream().forEach(friendsPO -> {
+            if (friendsPO.getUserCode().equals(code)) {
+                friendCodes.add(friendsPO.getUserCode());
+            } else {
+                friendCodes.add(friendsPO.getFriendCode());
+            }
+        });
+        List<UserPO> userPOS = userMapper.listByCode(friendCodes);
+        List<UserDTO> result = new ArrayList<>(userPOS.size());
+        userPOS.stream().forEach(userPO -> {
+            UserDTO userDTO = new UserDTO();
+            BeanUtils.copyProperties(userPO, userDTO);
+            result.add(userDTO);
+        });
+        return result;
     }
 }

@@ -3,6 +3,8 @@ package com.zh.netty.constant;
 import com.zh.netty.protocol.Packet;
 import com.zh.netty.protocol.friend.AddFriendRequestPacket;
 import com.zh.netty.protocol.friend.AddFriendResponsePacket;
+import com.zh.netty.protocol.friend.UpdateFriendListRequestPacket;
+import com.zh.netty.protocol.friend.UpdateFriendListResponsePacket;
 import com.zh.netty.protocol.hearbeat.HeartBeatRequestPacket;
 import com.zh.netty.protocol.hearbeat.HeartBeatResponsePacket;
 import com.zh.netty.protocol.login.LoginRequestPacket;
@@ -21,7 +23,9 @@ public enum  PacketTypeEnum {
     heartbeat_request((short)0x00f0, HeartBeatRequestPacket.class),
     heartbeat_response((short)0x10f0, HeartBeatResponsePacket.class),
     addfriend_request((short)0x0021, AddFriendRequestPacket.class),
-    addfriend_response((short)0x1021, AddFriendResponsePacket.class)
+    addfriend_response((short)0x1021, AddFriendResponsePacket.class),
+    updatefriendlist_request((short)0x0022, UpdateFriendListRequestPacket.class),
+    updateFriendlist_response((short)0x1022, UpdateFriendListResponsePacket.class),
     ;
 
     private Short code;

@@ -49,8 +49,6 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             ctx.channel().attr(AttributeKeyConsts.code).set(loginResponsePacket.getData().getCode());
             // 增加在线状态
             onlineStateService.online(loginResponsePacket.getData().getCode());
-            // 登录后增加空闲检测
-            ctx.pipeline().addFirst(SpringContextUtils.getBean(IdleHandler.class));
         }
         ByteBuf byteBuf = PacketCodec.encode(loginResponsePacket);
         ctx.channel().writeAndFlush(byteBuf);

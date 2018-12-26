@@ -28,11 +28,13 @@ public class ServerChannelInitializer extends ChannelInitializer<NioSocketChanne
     private CheckAuthHandler checkAuthHandler;
     @Autowired
     private AddFriendHandler addFriendHandler;
+    @Autowired
+    private UpdateFriendListRequestHandler updateFriendListRequestHandler;
 
     @Override
     protected void initChannel(NioSocketChannel nioSocketChannel) throws Exception {
         nioSocketChannel.pipeline()
-//                .addLast(SpringContextUtils.getBean(IdleHandler.class))
+                .addLast(SpringContextUtils.getBean(IdleHandler.class))
                 .addLast(SpringContextUtils.getBean(LengthFieldDecoder.class))
                 .addLast(SpringContextUtils.getBean(PacketDecoder.class))
                 .addLast(heartBeatHandler)
@@ -40,6 +42,7 @@ public class ServerChannelInitializer extends ChannelInitializer<NioSocketChanne
                 .addLast(loginRequestHandler)
                 .addLast(checkAuthHandler)
                 .addLast(addFriendHandler)
+                .addLast(updateFriendListRequestHandler)
                 .addLast(SpringContextUtils.getBean(PacketEncoder.class));
     }
 }

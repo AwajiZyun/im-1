@@ -23,6 +23,7 @@ create table friends(
   userCode varchar(20) not null,
   friendCode varchar(20) not null,
   createTime datetime not null,
+  primary key(id),
   unique index ui_uc_fc(userCode, friendCode),
   index i_fc(friendCode)
 ) engine=innodb;

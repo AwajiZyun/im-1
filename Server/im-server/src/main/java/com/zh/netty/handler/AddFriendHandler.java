@@ -7,7 +7,7 @@ import com.zh.exception.UserNotFoundException;
 import com.zh.netty.constant.AttributeKeyConsts;
 import com.zh.netty.protocol.friend.AddFriendRequestPacket;
 import com.zh.netty.protocol.friend.AddFriendResponsePacket;
-import com.zh.service.AddFriendService;
+import com.zh.service.FriendService;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 public class AddFriendHandler extends SimpleChannelInboundHandler<AddFriendRequestPacket> {
 
     @Autowired
-    private AddFriendService addFriendService;
+    private FriendService addFriendService;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, AddFriendRequestPacket msg) throws Exception {
