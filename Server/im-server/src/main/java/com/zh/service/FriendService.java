@@ -61,9 +61,9 @@ public class FriendService {
         List<String> friendCodes = new ArrayList<>(friendsPOS.size());
         friendsPOS.stream().forEach(friendsPO -> {
             if (friendsPO.getUserCode().equals(code)) {
-                friendCodes.add(friendsPO.getUserCode());
-            } else {
                 friendCodes.add(friendsPO.getFriendCode());
+            } else {
+                friendCodes.add(friendsPO.getUserCode());
             }
         });
         List<UserPO> userPOS = userMapper.listByCode(friendCodes);
