@@ -1,7 +1,5 @@
 {
     "success": true,
-    "data": {
-        "code": "123456",
-    },
+    "data": {},
     "msg": "失败原因!"
 }
