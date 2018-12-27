@@ -57,7 +57,11 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
         log.error(String.format("%s登录异常", socketAddress.getHostString()), cause);
-        SessionUtil.unbind(ctx.channel().attr(AttributeKeyConsts.code).get());
+        if (ctx.channel().hasAttr(AttributeKeyConsts.code)) {
+            String code = ctx.channel().attr(AttributeKeyConsts.code).get();
+            onlineStateService.offline(code);
+            SessionUtil.unbind(code);
+        }
         ctx.channel().close();
     }
 }

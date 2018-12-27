@@ -45,7 +45,7 @@ public class RegisterTest {
                        RegisterRequestPacket registerRequestPacket = new RegisterRequestPacket();
                        registerRequestPacket.setPassword(RSAUtil.encrypt(SystemConsts.PUBLIC_KEY, "zh26831"));
                        registerRequestPacket.setEmail("zh26831@163.com");
-                       registerRequestPacket.setSex(SexEnum.FEMALE);
+                       registerRequestPacket.setSex(SexEnum.female);
                        registerRequestPacket.setNickname("zh26831");
                        ((ChannelFuture)future).channel().writeAndFlush(registerRequestPacket);
                    } else {

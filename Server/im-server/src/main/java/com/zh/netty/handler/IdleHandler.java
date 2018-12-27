@@ -1,6 +1,5 @@
 package com.zh.netty.handler;
 
-import com.zh.constant.OnlineStateEnum;
 import com.zh.constant.SystemConsts;
 import com.zh.netty.constant.AttributeKeyConsts;
 import com.zh.service.OnlineStateService;
@@ -8,10 +7,7 @@ import com.zh.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
-import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -40,17 +36,22 @@ public class IdleHandler extends IdleStateHandler {
         InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
         log.info(String.format("%s空闲时间过长，连接关闭", socketAddress.getHostString()));
         // 离线
-        if (ctx.channel().hasAttr(AttributeKeyConsts.code)) {
-            String code = ctx.channel().attr(AttributeKeyConsts.code).get();
-            onlineStateService.offline(code);
-        }
+        offline(ctx);
         SessionUtil.unbind(ctx.channel());
         ctx.channel().close();
     }
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        offline(ctx);
         SessionUtil.unbind(ctx.channel());
         ctx.fireChannelInactive();
+    }
+
+    private void offline(ChannelHandlerContext ctx) {
+        if (ctx.channel().hasAttr(AttributeKeyConsts.code)) {
+            String code = ctx.channel().attr(AttributeKeyConsts.code).get();
+            onlineStateService.offline(code);
+        }
     }
 }

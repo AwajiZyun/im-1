@@ -1,7 +1,9 @@
 package com.zh.domain.user;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.zh.constant.OnlineStateEnum;
 import com.zh.constant.SexEnum;
+import com.zh.util.OnlineStateEnumCodec;
 import com.zh.util.SexEnumCodec;
 import lombok.Data;
 
@@ -21,4 +23,7 @@ public class UserVO {
     // 性别
     @JSONField(deserializeUsing = SexEnumCodec.class, serializeUsing = SexEnumCodec.class)
     private SexEnum sex;
+    // 在线状态
+    @JSONField(deserializeUsing = OnlineStateEnumCodec.class, serializeUsing = OnlineStateEnumCodec.class)
+    private OnlineStateEnum online;
 }
