@@ -28,7 +28,7 @@ public class FriendService {
     private UserMapper userMapper;
 
     @Transactional
-    public UserDTO addFriend(AddFriendDTO addFriendDTO) {
+    public UserDTO addFriend(AddFriendDTO addFriendDTO) throws Exception {
         Objects.requireNonNull(addFriendDTO.getUserCode(), "用户code不能为空");
         UserPO userPO = userMapper.selectByCodeOrEmail(addFriendDTO.getSymbol(), addFriendDTO.getSymbol());
         if (userPO == null) {
