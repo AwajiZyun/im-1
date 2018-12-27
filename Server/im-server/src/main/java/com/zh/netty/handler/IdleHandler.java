@@ -4,6 +4,7 @@ import com.zh.constant.OnlineStateEnum;
 import com.zh.constant.SystemConsts;
 import com.zh.netty.constant.AttributeKeyConsts;
 import com.zh.service.OnlineStateService;
+import com.zh.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
@@ -43,16 +44,13 @@ public class IdleHandler extends IdleStateHandler {
             String code = ctx.channel().attr(AttributeKeyConsts.code).get();
             onlineStateService.offline(code);
         }
+        SessionUtil.unbind(ctx.channel());
         ctx.channel().close();
     }
 
     @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        super.handlerAdded(ctx);
-    }
-
-    @Override
-    public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
-        super.handlerRemoved(ctx);
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        SessionUtil.unbind(ctx.channel());
+        ctx.fireChannelInactive();
     }
 }

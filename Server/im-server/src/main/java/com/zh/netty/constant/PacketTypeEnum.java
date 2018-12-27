@@ -9,6 +9,8 @@ import com.zh.netty.protocol.hearbeat.HeartBeatRequestPacket;
 import com.zh.netty.protocol.hearbeat.HeartBeatResponsePacket;
 import com.zh.netty.protocol.login.LoginRequestPacket;
 import com.zh.netty.protocol.login.LoginResponsePacket;
+import com.zh.netty.protocol.message.MessageRequestPacket;
+import com.zh.netty.protocol.message.MessageResponsePacket;
 import com.zh.netty.protocol.register.RegisterRequestPacket;
 import com.zh.netty.protocol.register.RegisterResponsePacket;
 
@@ -26,6 +28,8 @@ public enum  PacketTypeEnum {
     addfriend_response((short)0x1021, AddFriendResponsePacket.class),
     updatefriendlist_request((short)0x0022, UpdateFriendListRequestPacket.class),
     updateFriendlist_response((short)0x1022, UpdateFriendListResponsePacket.class),
+    message_request((short)0x0010, MessageRequestPacket.class),
+    message_response((short)0x1010, MessageResponsePacket.class),
     ;
 
     private Short code;

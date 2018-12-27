@@ -2,19 +2,16 @@ package com.zh.netty.handler;
 
 import com.zh.netty.constant.AttributeKeyConsts;
 import com.zh.service.OnlineStateService;
-import com.zh.service.RedisService;
 import com.zh.util.PacketCodec;
 import com.zh.netty.protocol.login.LoginRequestPacket;
 import com.zh.netty.protocol.login.LoginResponsePacket;
 import com.zh.service.LoginService;
-import com.zh.util.SpringContextUtils;
+import com.zh.util.SessionUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -49,6 +46,8 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             ctx.channel().attr(AttributeKeyConsts.code).set(loginResponsePacket.getData().getCode());
             // 增加在线状态
             onlineStateService.online(loginResponsePacket.getData().getCode());
+            // 存session
+            SessionUtil.bind(msg.getCode(), ctx.channel());
         }
         ByteBuf byteBuf = PacketCodec.encode(loginResponsePacket);
         ctx.channel().writeAndFlush(byteBuf);
@@ -58,6 +57,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
         log.error(String.format("%s登录异常", socketAddress.getHostString()), cause);
+        SessionUtil.unbind(ctx.channel().attr(AttributeKeyConsts.code).get());
         ctx.channel().close();
     }
 }

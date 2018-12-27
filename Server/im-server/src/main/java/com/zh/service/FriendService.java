@@ -32,7 +32,7 @@ public class FriendService {
         Objects.requireNonNull(addFriendDTO.getUserCode(), "用户code不能为空");
         UserPO userPO = userMapper.selectByCodeOrEmail(addFriendDTO.getSymbol(), addFriendDTO.getSymbol());
         if (userPO == null) {
-            throw new UserNotFoundException("用户不存在:" + addFriendDTO.getSymbol());
+            throw new UserNotFoundException();
         }
         // 保证userCode < friendCode
         String userCode = addFriendDTO.getUserCode();
