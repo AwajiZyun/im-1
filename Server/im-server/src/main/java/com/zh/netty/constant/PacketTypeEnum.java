@@ -11,6 +11,7 @@ import com.zh.netty.protocol.login.LoginRequestPacket;
 import com.zh.netty.protocol.login.LoginResponsePacket;
 import com.zh.netty.protocol.message.MessageRequestPacket;
 import com.zh.netty.protocol.message.MessageResponsePacket;
+import com.zh.netty.protocol.onlinestate.OnlineStateServerPushPacket;
 import com.zh.netty.protocol.register.RegisterRequestPacket;
 import com.zh.netty.protocol.register.RegisterResponsePacket;
 
@@ -30,6 +31,7 @@ public enum  PacketTypeEnum {
     updateFriendlist_response((short)0x1022, UpdateFriendListResponsePacket.class),
     message_request((short)0x0010, MessageRequestPacket.class),
     message_response((short)0x1010, MessageResponsePacket.class),
+    onlinestatepush_request((short)0x1030, OnlineStateServerPushPacket.class),
     ;
 
     private Short code;
