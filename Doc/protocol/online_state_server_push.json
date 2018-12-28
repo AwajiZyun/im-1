@@ -1,9 +1,4 @@
 {
-    "state": [
-        {
-            "code": "XXXXXX",
-            "online": 0
-	},
-	{}
-    ]
+	"code": "XXXXXX",
+	"online": 0
 }
