@@ -1,11 +1,10 @@
 package com.zh.util;
 
 import io.netty.util.CharsetUtil;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Base64;
 import java.util.Objects;
 
 /**
@@ -22,7 +21,7 @@ public class Base64Util {
     private static String encrypt(String source, String charsetName) {
         Objects.requireNonNull(source, "源字符串不能为null");
         try {
-            return (new BASE64Encoder()).encode(source.getBytes(charsetName))
+            return Base64.getEncoder().encodeToString(source.getBytes(charsetName))
                     .replaceAll("[\\r\\n]", "");
         } catch (UnsupportedEncodingException e) {
             return null;
@@ -36,7 +35,7 @@ public class Base64Util {
     private static String decrypt(String base64_source, String charsetName) {
         Objects.requireNonNull(base64_source, "加密字符串不能为null");
         try {
-            return new String((new BASE64Decoder()).decodeBuffer(base64_source), charsetName);
+            return new String(Base64.getDecoder().decode(base64_source), charsetName);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
