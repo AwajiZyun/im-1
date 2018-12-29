@@ -55,7 +55,7 @@ public class LoginTest {
                                    channel.writeAndFlush(new HeartBeatRequestPacket());
                                }, 5, 5, TimeUnit.SECONDS);
                        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-                       loginRequestPacket.setCode("500001");
+                       loginRequestPacket.setCode("500010");
                        loginRequestPacket.setPassword(RSAUtil.encrypt(SystemConsts.PUBLIC_KEY, "123"));
                        channel.writeAndFlush(loginRequestPacket);
                    } else {
