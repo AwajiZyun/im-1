@@ -60,22 +60,20 @@ public class OnlineStateService {
         }
         // 2, 通知好友
         List<UserDTO> friends = friendService.listFriends(code);
-        if (friends != null) {
-            friends.parallelStream().forEach(friend -> {
-                Channel channel = SessionUtil.get(friend.getCode());
-                if (channel == null) {
-                    return;
-                }
-                try {
-                    OnlineStateServerPushPacket onlineStateServerPushPacket = new OnlineStateServerPushPacket();
-                    onlineStateServerPushPacket.setCode(code);
-                    onlineStateServerPushPacket.setOnline(stateEnum);
-                    channel.writeAndFlush(onlineStateServerPushPacket);
-                } catch (Exception e) {
-                    log.error("推送好友在线状态失败: " + friend.getCode(), e);
-                }
-            });
-        }
+        friends.parallelStream().forEach(friend -> {
+            Channel channel = SessionUtil.get(friend.getCode());
+            if (channel == null) {
+                return;
+            }
+            try {
+                OnlineStateServerPushPacket onlineStateServerPushPacket = new OnlineStateServerPushPacket();
+                onlineStateServerPushPacket.setCode(code);
+                onlineStateServerPushPacket.setOnline(stateEnum);
+                channel.writeAndFlush(onlineStateServerPushPacket);
+            } catch (Exception e) {
+                log.error("推送好友在线状态失败: " + friend.getCode(), e);
+            }
+        });
     }
 
     public OnlineStateEnum getOnlineState(String code) {

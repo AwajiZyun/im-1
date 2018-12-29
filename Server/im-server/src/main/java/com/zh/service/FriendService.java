@@ -76,6 +76,6 @@ public class FriendService {
             });
             return result;
         }
-        return null;
+        return new ArrayList<>(0);
     }
 }
