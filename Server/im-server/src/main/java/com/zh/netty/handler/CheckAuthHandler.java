@@ -26,13 +26,14 @@ public class CheckAuthHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (!ctx.channel().hasAttr(AttributeKeyConsts.login) &&
                 ctx.channel().hasAttr(AttributeKeyConsts.register)) {
-            super.channelRead(ctx, msg);
-        }
-        if (ctx.channel().hasAttr(AttributeKeyConsts.login)) {
-            ctx.pipeline().remove(this);
             ctx.fireChannelRead(msg);
         } else {
-            ctx.channel().close();
+            if (ctx.channel().hasAttr(AttributeKeyConsts.login)) {
+                ctx.pipeline().remove(this);
+                ctx.fireChannelRead(msg);
+            } else {
+                ctx.channel().close();
+            }
         }
     }
 
@@ -50,5 +51,6 @@ public class CheckAuthHandler extends ChannelInboundHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         InetSocketAddress socketAddress = (InetSocketAddress) ctx.channel().remoteAddress();
         log.error(String.format("%s认证检测异常", socketAddress.getHostString()), cause);
+        ctx.channel().close();
     }
 }

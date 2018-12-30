@@ -1,6 +1,7 @@
 package com.zh.netty.handler;
 
 import com.zh.exception.UserOfflineException;
+import com.zh.netty.constant.AttributeKeyConsts;
 import com.zh.netty.protocol.message.MessageRequestPacket;
 import com.zh.netty.protocol.message.MessageResponsePacket;
 import com.zh.util.SessionUtil;
@@ -27,6 +28,10 @@ public class SendMessageRequestHandler extends SimpleChannelInboundHandler<Messa
         Channel userChannel = SessionUtil.get(msg.getToUser());
         if (userChannel == null) {
             throw new UserOfflineException();
+        }
+        // 加上发送方信息
+        if (ctx.channel().hasAttr(AttributeKeyConsts.code)) {
+            msg.setFromUser(ctx.channel().attr(AttributeKeyConsts.code).get());
         }
         userChannel.writeAndFlush(msg);
     }

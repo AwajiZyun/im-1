@@ -66,13 +66,16 @@ public class FriendService {
                 friendCodes.add(friendsPO.getUserCode());
             }
         });
-        List<UserPO> userPOS = userMapper.listByCode(friendCodes);
-        List<UserDTO> result = new ArrayList<>(userPOS.size());
-        userPOS.stream().forEach(userPO -> {
-            UserDTO userDTO = new UserDTO();
-            BeanUtils.copyProperties(userPO, userDTO);
-            result.add(userDTO);
-        });
-        return result;
+        if (friendCodes.size() > 0) {
+            List<UserPO> userPOS = userMapper.listByCode(friendCodes);
+            List<UserDTO> result = new ArrayList<>(userPOS.size());
+            userPOS.stream().forEach(userPO -> {
+                UserDTO userDTO = new UserDTO();
+                BeanUtils.copyProperties(userPO, userDTO);
+                result.add(userDTO);
+            });
+            return result;
+        }
+        return new ArrayList<>(0);
     }
 }

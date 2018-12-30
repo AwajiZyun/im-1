@@ -24,7 +24,7 @@ public class ServerStarter {
             imServer.start();
             log.info("启动完成");
         } catch (Exception e) {
-            log.error("im启动失败", e);
+            log.error("启动失败", e);
         }
     }
 }

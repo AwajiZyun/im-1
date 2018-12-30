@@ -8,6 +8,7 @@ import com.zh.netty.constant.AttributeKeyConsts;
 import com.zh.netty.protocol.friend.AddFriendRequestPacket;
 import com.zh.netty.protocol.friend.AddFriendResponsePacket;
 import com.zh.service.FriendService;
+import com.zh.service.OnlineStateService;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -30,6 +31,9 @@ public class AddFriendHandler extends SimpleChannelInboundHandler<AddFriendReque
     @Autowired
     private FriendService addFriendService;
 
+    @Autowired
+    private OnlineStateService onlineStateService;
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, AddFriendRequestPacket msg) throws Exception {
         AddFriendDTO addFriendDTO = new AddFriendDTO();
@@ -39,6 +43,7 @@ public class AddFriendHandler extends SimpleChannelInboundHandler<AddFriendReque
         UserDTO userDTO = addFriendService.addFriend(addFriendDTO);
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(userDTO, userVO);
+        userVO.setOnline(onlineStateService.getOnlineState(userVO.getCode()));
         addFriendResponsePacket.setData(userVO);
         addFriendResponsePacket.setSuccess(true);
         ctx.channel().writeAndFlush(addFriendResponsePacket);

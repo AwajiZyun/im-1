@@ -8,9 +8,9 @@ import java.util.Map;
  * @author zh2683
  */
 public enum SexEnum {
-    MALE("男"),
-    FEMALE("女"),
-    OTHER("其他");
+    male("男"),
+    female("女"),
+    other("其他");
 
     private static final Map<Integer, SexEnum> sexMap = new HashMap<>();
 

@@ -1,8 +1,5 @@
 package com.zh.util;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -11,6 +8,7 @@ import java.io.IOException;
 import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,7 +67,7 @@ public class RSAUtil {
      */
     public static PublicKey getPublicKey(String key) throws Exception {
         byte[] keyBytes;
-        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        keyBytes = Base64.getDecoder().decode(key);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         PublicKey publicKey = keyFactory.generatePublic(keySpec);
@@ -85,7 +83,7 @@ public class RSAUtil {
      */  
     public static PrivateKey getPrivateKey(String key) throws Exception {
         byte[] keyBytes;
-        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        keyBytes = Base64.getDecoder().decode(key);
         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
@@ -99,8 +97,7 @@ public class RSAUtil {
      */  
     public static String getKeyString(Key key) throws Exception {
         byte[] keyBytes = key.getEncoded();
-        String s = (new BASE64Encoder()).encode(keyBytes);
-        return s;
+        return Base64.getEncoder().encodeToString(keyBytes);
     }
     
     /** 
@@ -113,7 +110,7 @@ public class RSAUtil {
         try {             
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);  
             byte[] enBytes = cipher.doFinal(plainText.getBytes());            
-            return (new BASE64Encoder()).encode(enBytes);  
+            return Base64.getEncoder().encodeToString(enBytes);
         } catch (InvalidKeyException e) {  
             e.printStackTrace();  
         } catch (IllegalBlockSizeException e) {  
@@ -134,7 +131,7 @@ public class RSAUtil {
         try {
             cipher.init(Cipher.ENCRYPT_MODE,getPublicKey(publicKey));
             byte[] enBytes = cipher.doFinal(plainText.getBytes());
-            return (new BASE64Encoder()).encode(enBytes);
+            return Base64.getEncoder().encodeToString(enBytes);
         } catch (InvalidKeyException e) {
             e.printStackTrace();
         } catch (IllegalBlockSizeException e) {
@@ -156,7 +153,7 @@ public class RSAUtil {
     public static String decrypt(String privateKey, String enStr){
         try {
             cipher.init(Cipher.DECRYPT_MODE, getPrivateKey(privateKey));
-            byte[] deBytes = cipher.doFinal((new BASE64Decoder()).decodeBuffer(enStr));
+            byte[] deBytes = cipher.doFinal(Base64.getDecoder().decode(enStr));
             return new String(deBytes);
         } catch (InvalidKeyException e) {
             e.printStackTrace();

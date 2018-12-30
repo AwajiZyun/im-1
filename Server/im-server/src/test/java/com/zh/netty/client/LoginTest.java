@@ -2,6 +2,7 @@ package com.zh.netty.client;
 
 import com.zh.constant.ImConfig;
 import com.zh.constant.SystemConsts;
+import com.zh.netty.client.handler.OnlineStateServerPushHandler;
 import com.zh.netty.client.handler.TestHeartResponseHandler;
 import com.zh.netty.client.handler.TestLoginResponseHandler;
 import com.zh.netty.handler.HeartBeatHandler;
@@ -40,7 +41,8 @@ public class LoginTest {
                                 .pipeline()
                                 .addLast(new PacketDecoder())
                                 .addLast(new TestLoginResponseHandler())
-//                                .addLast(new TestHeartResponseHandler())
+                                .addLast(new TestHeartResponseHandler())
+                                .addLast(new OnlineStateServerPushHandler())
                                 .addLast(new PacketEncoder());
                     }
                 });
@@ -48,13 +50,13 @@ public class LoginTest {
                 .addListener(future -> {
                    if (future.isSuccess()) {
                        Channel channel = ((ChannelFuture)future).channel();
-//                       channel.eventLoop()
-//                               .scheduleWithFixedDelay(() -> {
-//                                   channel.writeAndFlush(new HeartBeatRequestPacket());
-//                               }, 5, 5, TimeUnit.SECONDS);
+                       channel.eventLoop()
+                               .scheduleWithFixedDelay(() -> {
+                                   channel.writeAndFlush(new HeartBeatRequestPacket());
+                               }, 5, 5, TimeUnit.SECONDS);
                        LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-                       loginRequestPacket.setCode("500000");
-                       loginRequestPacket.setPassword(RSAUtil.encrypt(SystemConsts.PUBLIC_KEY, "zh2683"));
+                       loginRequestPacket.setCode("500010");
+                       loginRequestPacket.setPassword(RSAUtil.encrypt(SystemConsts.PUBLIC_KEY, "123"));
                        channel.writeAndFlush(loginRequestPacket);
                    } else {
                        System.out.println("failure");
