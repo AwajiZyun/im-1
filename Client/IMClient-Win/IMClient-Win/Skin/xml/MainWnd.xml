@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="700,600" sizebox="4,4,6,6" roundcorner="15,15" caption="200,0,0,50" showshadow="true" shadowimage="shadow.png" shadowcorner="30,30,30,30" shadowsize="25">
+  <Font id="0" name="宋体" size="18" bold="true" />
+  <Font id="1" name="宋体" size="16" bold="false" />
+  <Font id="2" name="宋体" size="18" bold="false" />
+  <Font id="3" name="宋体" size="16" bold="true" />
+  <Default shared="true" name="VScrollBar" value="button1normalimage=&quot;file='scrollbar.bmp' source='0,90,16,106' mask='#FFFF00FF'&quot; button1hotimage=&quot;file='scrollbar.bmp' source='18,90,34,106' mask='#FFFF00FF'&quot; button1pushedimage=&quot;file='scrollbar.bmp' source='36,90,52,106' mask='#FFFF00FF'&quot; button1disabledimage=&quot;file='scrollbar.bmp' source='54,90,70,106' mask='#FFFF00FF'&quot; button2normalimage=&quot;file='scrollbar.bmp' source='0,108,16,124' mask='#FFFF00FF'&quot; button2hotimage=&quot;file='scrollbar.bmp' source='18,108,34,124' mask='#FFFF00FF'&quot; button2pushedimage=&quot;file='scrollbar.bmp' source='36,108,52,124' mask='#FFFF00FF'&quot; button2disabledimage=&quot;file='scrollbar.bmp' source='54,108,70,124' mask='#FFFF00FF'&quot; thumbnormalimage=&quot;file='scrollbar.bmp' source='0,126,16,142' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbhotimage=&quot;file='scrollbar.bmp' source='18,126,34,142' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbpushedimage=&quot;file='scrollbar.bmp' source='36,126,52,142' corner='2,2,2,2' mask='#FFFF00FF'&quot; thumbdisabledimage=&quot;file='scrollbar.bmp' source='54,126,70,142' corner='2,2,2,2' mask='#FFFF00FF'&quot; railnormalimage=&quot;file='scrollbar.bmp' source='0,144,16,160' corner='2,2,2,2' mask='#FFFF00FF'&quot; railhotimage=&quot;file='scrollbar.bmp' source='18,144,34,160' corner='2,2,2,2' mask='#FFFF00FF'&quot; railpushedimage=&quot;file='scrollbar.bmp' source='36,144,52,160' corner='2,2,2,2' mask='#FFFF00FF'&quot; raildisabledimage=&quot;file='scrollbar.bmp' source='54,144,70,160' corner='2,2,2,2' mask='#FFFF00FF'&quot; bknormalimage=&quot;file='scrollbar.bmp' source='0,162,16,178' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkhotimage=&quot;file='scrollbar.bmp' source='18,162,34,178' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkpushedimage=&quot;file='scrollbar.bmp' source='36,162,52,178' corner='2,2,2,2' mask='#FFFF00FF'&quot; bkdisabledimage=&quot;file='scrollbar.bmp' source='54,162,70,178' corner='2,2,2,2' mask='#FFFF00FF'&quot; " />
+  <VerticalLayout  borderround="5,5,5,5" inset="0,0,0,0">
+    <!-- Titile -->
+    <HorizontalLayout height="50" bkimage="MainBG.png">
+        <Button name="btnHeadImg" width="40" height="40" padding="15,5,0,0" normalimage="HeadMale.png" hotimage="HeadMaleHot.png" pushimage="HeadMale.png" />
+        <Control width="10"/>
+        <Edit name="editSearch" width="120" height="25" padding="15,15,0,0" bkcolor="#00000000" bordersize="1" bordercolor="#FFFFFFFF" font="2" textcolor="#FF666666"/>
+        <Button name="btnSearch" width="25" height="25" padding="15,15,0,0" normalimage="Search.png" hotimage="Search.png" pushimage="Search.png"/>
+        <Control />
+        <Button name="btnSetting"  width="25" height="25" padding="0,12,0,0" normalimage="file='DlgSetting.png' source='0,0,100,100'" hotimage="file='DlgSetting.png' source='100,0,200,100'" pushedimage="file='DlgSetting.png' source='200,0,300,100'"/>
+        <Button name="btnMin"   width="25" height="25" padding="0,12,0,0" normalimage="file='DlgMinsize.png' source='0,0,100,100'" hotimage="file='DlgMinsize.png' source='100,0,200,100'" pushedimage="file='DlgMinsize.png' source='200,0,300,100'"/>
+        <Button name="btnClose" width="25" height="25" padding="0,12,0,0" normalimage="file='DlgClose.png'   source='0,0,100,100'" hotimage="file='DlgClose.png'   source='100,0,200,100'" pushedimage="file='DlgClose.png'   source='200,0,300,100'"/>
+        <Control width="12"/>
+    </HorizontalLayout>
+
+    <HorizontalLayout>
+      <!-- Friends list -->
+      <VerticalLayout width="150" bkcolor="#FFEEEEEE" inset="2,0,0,0">
+        <List name="lstFriends" padding="4,4,4,4" header="hidden" menu="true" vscrollbar="true">
+          <!--
+          <ListContainerElement name="lstEle0" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Container name="conTest" bkimage="DotMsg.png" float="true" pos="20,0,30,10" />
+              <Label text="友人A" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle1" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人B" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle2" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人C" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle3" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人D" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle4" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人E" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle5" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人F" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle6" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人G" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle7" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人H" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle8" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人I" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle9" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人J" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle10" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人K" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle11" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人L" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle12" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人M" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle13" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人N" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle14" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人O" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          <ListContainerElement name="lstEle15" height="40" inset="10,0,0,0">
+            <HorizontalLayout>
+              <Container bkimage="HeadMale.png" width="30" height="30" />
+              <Label text="友人P" textpadding="10,0,0,0"/>
+            </HorizontalLayout>
+          </ListContainerElement>
+          -->
+        </List>
+      </VerticalLayout>
+      
+      <!-- Dialog -->
+      <VerticalLayout bkcolor="#FFFFFFFF" >
+        <VerticalLayout inset="2,2,2,2">
+          <HorizontalLayout height="23" inset="0,0,10,0" >
+            <label name="labelFriendName" textpadding="10,0,0,0" width="150" font="2"/>
+            <Control />
+            <Button name="btnFriendDlgCfg" cursor="hand" width="20" height="20" normalimage="file='BtnConfig.png' source='40,0,80,40'" hotimage="file='BtnConfig.png' source='0,0,40,40'" pushedimage="file='BtnConfig.png' source='0,0,40,40'"/>
+          </HorizontalLayout>
+          <Control height="2" bordersize="1" bordercolor="#FFEEEEEE" />
+          <list name="lstDialog" padding="4,4,4,4" header="hidden" menu="true" vscrollbar="true" >
+            <!--
+            <ListContainerElement name="lstDiaEle0" height="40" inset="10,0,0,0">
+              <VerticalLayout>
+                <Label text="友人A:" height="20" textpadding="10,0,0,0" align="left" />
+                <Container bkimage="DotMsg.png" pos="20,0,30,10" float="true"  />
+                <Label text="人类的本质就是复读机" textpadding="10,0,0,0" align="left" />
+              </VerticalLayout>
+            </ListContainerElement>
+            <ListContainerElement name="lstDiaEle0" height="40" inset="10,0,0,0">
+              <VerticalLayout>
+                <Label text="我:" height="20" textpadding="0,0,10,0" align="right" />
+                <Label text="人类的本质就是复读机" textpadding="0,0,10,0" align="right" />
+              </VerticalLayout>
+            </ListContainerElement>
+            -->
+          </list>
+          <Control height="2" bordersize="1" bordercolor="#FFEEEEEE" />
+          <HorizontalLayout height="30" inset="5,5,5,0">
+            <Button name="btnFont" cursor="hand" width="20" height="20" normalimage="file='BtnFont.png' source='40,0,80,40'" hotimage="file='BtnFont.png' source='0,0,40,40'" pushedimage="file='BtnFont.png' source='0,0,40,40'"/>
+            <Control width="15"/>
+            <Button name="btnFace" cursor="hand" width="20" height="20" normalimage="file='BtnFace.png' source='40,0,80,40'" hotimage="file='BtnFace.png' source='0,0,40,40'" pushedimage="file='BtnFace.png' source='0,0,40,40'"/>
+            <Control width="15"/>
+            <Button name="btnBtnScissors" cursor="hand" width="20" height="20" normalimage="file='BtnScissors.png' source='40,0,80,40'" hotimage="file='BtnScissors.png' source='0,0,40,40'" pushedimage="file='BtnScissors.png' source='0,0,40,40'"/>
+            <Control width="15"/>
+            <Button name="btnShake" cursor="hand" width="20" height="20" normalimage="file='BtnShake.png' source='40,0,80,40'" hotimage="file='BtnShake.png' source='0,0,40,40'" pushedimage="file='BtnShake.png' source='0,0,40,40'"/>
+            <Control width="15"/>
+            <Button name="btnMicrophone" cursor="hand" width="20" height="20" normalimage="file='BtnMicrophone.png' source='40,0,80,40'" hotimage="file='BtnMicrophone.png' source='0,0,40,40'" pushedimage="file='BtnMicrophone.png' source='0,0,40,40'"/>
+            <Control width="15"/>
+            <Button name="btnPhoto" cursor="hand" width="20" height="20" normalimage="file='BtnPhoto.png' source='40,0,80,40'" hotimage="file='BtnPhoto.png' source='0,0,40,40'" pushedimage="file='BtnPhoto.png' source='0,0,40,40'"/>
+            <Control width="15"/>
+            <Button name="btnFile" cursor="hand" width="20" height="20" normalimage="file='BtnFile.png' source='40,0,80,40'" hotimage="file='BtnFile.png' source='0,0,40,40'" pushedimage="file='BtnFile.png' source='0,0,40,40'"/>
+            <Control />
+            <Button name="btnHistoryMsg" cursor="hand" text="消息记录" textcolor="#FFAAAAAA" font="1" width="80" height="20" normalimage="file='BtnHistoryMsg.png' source='40,0,80,40'" hotimage="file='BtnHistoryMsg.png' source='0,0,40,40'" pushedimage="file='BtnHistoryMsg.png' source='0,0,40,40'"/>
+          </HorizontalLayout>
+          <RichEdit name="richEdit" height="80" padding="4,4,4,4" textpadding="8,4,4,4" font="1" />
+          <Button name="btnSendMsg" width="80" height="24" padding="466,0,5,8" text="发送(&S)" shortcut="S" textcolor="#FFFFFFFF" font="3" normalimage="file='button.png' source='0,0,64,26'" hotimage="file='button.png' source='64,0,128,26'" pushedimage="file='button.png' source='128,0,192,26'"/>
+        </VerticalLayout>
+      </VerticalLayout>
+    </HorizontalLayout>
+
+  </VerticalLayout>
+</Window>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="300,430" sizebox="4,4,6,6" roundcorner="15,15" caption="0,0,0,150" mininfo="400,400">
+  <Font id="0" name="宋体" size="18" bold="true" />
+  <Font id="1" name="宋体" size="16" bold="false" />
+
+  <VerticalLayout bkcolor="#FFEEEEEE" borderround="5,5,5,5" inset="0,0,0,0">
+    <HorizontalLayout height="40" bkimage="LoginBG.png">
+      <!-- Titile -->
+        <Control />
+        <Button name="btnClose" keyboard="false" width="25" padding="0,8,0,8" normalimage="file='DlgClose.png' source='0,0,100,100'" hotimage="file='DlgClose.png' source='100,0,200,100'" pushedimage="file='DlgClose.png' source='200,0,300,100'"/>
+        <Control width="5"/>
+    </HorizontalLayout>
+
+    <!-- User info -->
+    <VerticalLayout height="330" inset="0,20,0,0">
+      <!-- Head image-->
+      <HorizontalLayout height="110">
+        <Button name="btnUsrImg" keyboard="false" width="100" height="100" bkimage="HeadMale.png" padding="110,0,0,0"/>
+      </HorizontalLayout>
+      <!-- Text information -->
+      <VerticalLayout>
+        <!-- Nick name-->
+        <HorizontalLayout height="40">
+          <Label width="100" align="right" textcolor="#FFA8A8A8" textpadding="0,0,0,10" font="1" text="昵称" />
+          <Control width="10" />
+          <Edit name="editNickname" width="130" height="30" bordersize="1" bordercolor="FFC8C8C8" font="0"/>
+        </HorizontalLayout>
+        <!-- Mail address-->
+        <HorizontalLayout height="40">
+          <Label width="100" align="right" textcolor="#FFA8A8A8" textpadding="0,0,0,10" font="1" text="邮箱" />
+          <Control width="10" />
+          <Edit name="editMailAddr" width="130" height="30" bordersize="1" bordercolor="FFC8C8C8" font="0"/>
+        </HorizontalLayout>
+        <!-- Sex-->
+        <HorizontalLayout height="40">
+          <Label width="100" align="right" textcolor="#FFA8A8A8" textpadding="0,0,0,10" font="1" text="性别" />
+          <Control width="10" />
+          <Combo name="comboSex" width="130" height="30" bordercolor="FFC8C8C8" font="0" normalimage="ComboNormal.bmp" hotimage="ComboNormal.bmp" pushedimage="ComboPush.bmp" itemtextpadding="5,0,0,0">
+            <ListLabelElement text="男" selected="true" padding="5,0,0,0" />
+            <ListLabelElement text="女" padding="5,0,0,0" />
+            <ListLabelElement text="其他" padding="5,0,0,0" />
+          </Combo>
+          <Control />
+        </HorizontalLayout>
+        <!-- Password-->
+        <HorizontalLayout height="40">
+          <Label width="100" align="right" textcolor="#FFA8A8A8" textpadding="0,0,0,10" font="1" text="密码" />
+          <Control width="10" />
+          <Edit name="editPwd" width="130" height="30" bordersize="1" bordercolor="FFC8C8C8" font="0" password="true" />
+        </HorizontalLayout>
+        <!-- Password confirm-->
+        <HorizontalLayout height="40">
+          <Label width="100" align="right" textcolor="#FFA8A8A8" textpadding="0,0,0,10" font="1" text="密码确认" />
+          <Control width="10" />
+          <Edit name="editPwdConfirm" width="130" height="30" bordersize="1" bordercolor="FFC8C8C8" font="0" password="true" />
+        </HorizontalLayout>
+      </VerticalLayout>
+
+    </VerticalLayout>
+    
+    <!-- Button -->
+    <HorizontalLayout height="45">
+      <Control width="110" />
+      <Button name="btnRegist" keyboard="false" width="120" padding="0,8,0,8" text="注  册" font="0" normalimage="ButtonNormal.bmp" hotimage="ButtonOver.bmp'" pushedimage="ButtonPush.bmp"/>
+      <Control />
+    </HorizontalLayout>
+
+  </VerticalLayout>
+</Window>

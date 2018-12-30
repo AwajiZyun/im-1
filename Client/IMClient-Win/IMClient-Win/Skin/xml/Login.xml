@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="400,320" sizebox="4,4,6,6" roundcorner="4,4" caption="0,0,0,150" showshadow="true" shadowimage="shadow.png" shadowcorner="30,30,30,30" shadowsize="25">
+  <Font id="0" name="宋体" size="18" bold="true" />
+  <Font id="1" name="宋体" size="16" bold="false" />
+
+  <VerticalLayout bkcolor="#FFEEEEEE" borderround="5,5,5,5" inset="0,0,0,0">
+    <VerticalLayout height="150" bkimage="LoginBG.png">
+      <!-- Titile -->
+      <HorizontalLayout height="33"  >
+        <Control />
+        <Button name="btnSetting" keyboard="false" width="25" height="33" padding="0,8,0,0" normalimage="file='DlgSetting.png' source='0,0,100,100'" hotimage="file='DlgSetting.png' source='100,0,200,100'" pushedimage="file='DlgSetting.png' source='200,0,300,100'"/>
+        <Button name="btnMin"  keyboard="false"  width="25" height="33" padding="0,8,0,0" normalimage="file='DlgMinsize.png' source='0,0,100,100'" hotimage="file='DlgMinsize.png' source='100,0,200,100'" pushedimage="file='DlgMinsize.png' source='200,0,300,100'"/>
+        <Button name="btnClose" keyboard="false"  width="25" height="33" padding="0,8,0,0" normalimage="file='DlgClose.png'   source='0,0,100,100'" hotimage="file='DlgClose.png'   source='100,0,200,100'" pushedimage="file='DlgClose.png'   source='200,0,300,100'"/>
+        <Control width="5"/>
+      </HorizontalLayout>
+      <!-- Logo -->
+      <HorizontalLayout>
+        <Control width="120" />
+        <Container width="200" height="105" bkimage="Logo.png" />
+      </HorizontalLayout>
+    </VerticalLayout>
+
+    <!-- Login info -->
+    <VerticalLayout>
+      <HorizontalLayout height="20"/>
+      <HorizontalLayout>
+        <Control width="20"/>
+        <Control name="ctlHeadImg" width="90" height="90" bkimage="HeadMale.png"/>
+        <Control width="15"/>
+        <!-- Input -->
+        <VerticalLayout> 
+          <!-- User name-->
+          <HorizontalLayout height="30">
+            <Edit name="editUsrName" width="160" height="30" tooltip="邮箱/用户ID" bordersize="1" bordercolor="FFC8C8C8" font="0"/>
+            <Control width="8" />
+            <Button name="btnRegist" cursor="hand" keyboard="false" width="100" text="注册账号" font="1" textcolor="FF51A4E1" />
+          </HorizontalLayout> 
+          <!-- Password -->
+          <HorizontalLayout height="38">
+            <Edit name="editPassword" width="160" height="30" tooltip="密码" bordersize="1" bordercolor="FFC8C8C8" password="true" font="0"/>
+            <Control width="8" />
+            <Button name="btnForgetPwd" cursor="hand" keyboard="false"  width="100" text="忘记密码" font="1" textcolor="FF51A4E1" />
+          </HorizontalLayout>
+          <!-- Options-->
+          <HorizontalLayout height="38">
+            <Option name="optionSavePwd" cursor="hand" keyboard="false"   pos="0,0" width="85" height="30" text="记住密码" textcolor="#FFA8A8A8" font="2" textpadding="0,0,0,0" normalimage="file='Checkbox.png' source='0,0,200,200' dest='0,7,15,22'" selectedimage="file='Checkbox.png' source='200,0,400,200' dest='0,7,15,22'"/>
+            <Control width="20"/>
+            <Option name="optionAutoLogin" cursor="hand" keyboard="false"  pos="0,0" width="85" height="30" text="自动登陆" textcolor="#FFA8A8A8" font="2" textpadding="0,0,0,0" normalimage="file='Checkbox.png' source='0,0,200,200' dest='0,7,15,22'" selectedimage="file='Checkbox.png' source='200,0,400,200' dest='0,7,15,22'"/>
+            <Control />
+          </HorizontalLayout>
+          <HorizontalLayout height="30">
+            <Button name="btnLogin" cursor="hand" keyboard="false"  width="160" text="登  录" font="1" align="center" textcolor="#FFFFFFFF" bkcolor="#FF0776D1"/>
+          </HorizontalLayout>
+        </VerticalLayout>
+      </HorizontalLayout>
+    </VerticalLayout>
+
+  </VerticalLayout>
+</Window>
