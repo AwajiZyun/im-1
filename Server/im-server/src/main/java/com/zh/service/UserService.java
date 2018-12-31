@@ -1,5 +1,6 @@
 package com.zh.service;
 
+import com.zh.domain.user.UpdateUserDTO;
 import com.zh.domain.user.UserDTO;
 import com.zh.domain.user.UserPO;
 import com.zh.mapper.UserMapper;
@@ -57,5 +58,9 @@ public class UserService {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(userPO, userDTO);
         return userDTO;
+    }
+
+    public Integer update(UpdateUserDTO updateUserDTO) {
+        return userMapper.update(updateUserDTO);
     }
 }

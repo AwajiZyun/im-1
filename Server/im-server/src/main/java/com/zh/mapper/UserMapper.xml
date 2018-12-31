@@ -73,4 +73,17 @@
         from `user`
         where email_crc32 = crc32(#{email}) and email = #{email} and `delete` = 0;
     </select>
+
+    <update id="update" parameterType="UpdateUserDTO">
+      update `user`
+      <set>
+          <if test="nickname != null and nickname != ''">nickname=#{nickname},</if>
+          <if test="sex != null">sex=#{sex, typeHandler=org.apache.ibatis.type.EnumOrdinalTypeHandler},</if>
+          <if test="newPassword != null and newPassword != ''">`password`=#{newPassword},</if>
+          <if test="modifyTime != null">modifyTime=#{modifyTime}</if>
+      </set>
+      <where>
+          `code` = #{code} and `password` = #{oldPassword} and `delete` = 0;
+      </where>
+    </update>
 </mapper>
