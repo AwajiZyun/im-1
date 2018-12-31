@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window size="240,350" sizebox="4,4,6,6" roundcorner="15,15" caption="0,0,0,40">
+  <Font id="0" name="宋体" size="18" bold="true" />
+  <Font id="1" name="宋体" size="16" bold="false" />
+
+  <VerticalLayout bkcolor="#FFEEEEEE" borderround="5,5,5,5" inset="0,0,0,0">
+    <HorizontalLayout height="40" bkimage="LoginBG.png">
+      <!-- Titile -->
+      <Control />
+      <Button name="btnClose" width="25" padding="0,8,0,8" normalimage="file='DlgClose.png' source='0,0,100,100'" hotimage="file='DlgClose.png' source='100,0,200,100'" pushedimage="file='DlgClose.png' source='200,0,300,100'"/>
+      <Control width="5"/>
+    </HorizontalLayout>
+
+    <!-- User info -->
+    <VerticalLayout height="330" inset="0,20,0,0">
+      <!-- Head image-->
+      <HorizontalLayout height="110">
+        <Control name="ctlHeadImg" width="100" height="100" bkimage="HeadMale.png" padding="70,0,0,0"/>
+      </HorizontalLayout>
+      <!-- Text information -->
+      <VerticalLayout>
+        <!-- ID-->
+        <HorizontalLayout height="40">
+          <Label width="70" align="right" textcolor="#FFA8A8A8" textpadding="0,0,0,10" font="1" text="ID" />
+          <Control width="10" />
+          <Edit name="editID" width="130" height="30" bkcolor="#00000000" font="0" readonly="true" />
+        </HorizontalLayout>
+        <!-- Nick name-->
+        <HorizontalLayout height="40">
+          <Label width="70" align="right" textcolor="#FFA8A8A8" textpadding="0,0,0,10" font="1" text="昵称" />
+          <Control width="10" />
+          <Edit name="editNickname" width="130" height="30" bkcolor="#00000000" font="0" readonly="true"/>
+        </HorizontalLayout>
+        <!-- Sex-->
+        <HorizontalLayout height="40">
+          <Label width="70" align="right" textcolor="#FFA8A8A8" textpadding="0,0,0,10" font="1" text="性别" />
+          <Control width="10" />
+          <Edit name="editSex" width="130" height="30" bkcolor="#00000000" font="0" readonly="true"/>
+          <Control />
+        </HorizontalLayout>
+        <!-- email -->
+        <HorizontalLayout height="40">
+          <Label width="70" align="right" textcolor="#FFA8A8A8" textpadding="0,0,0,10" font="1" text="邮箱" />
+          <Control width="10" />
+          <Edit name="editEmail" width="130" height="30" bkcolor="#00000000" font="0" readonly="true"/>
+          <Control />
+        </HorizontalLayout>
+      </VerticalLayout>
+    </VerticalLayout>
+    
+  </VerticalLayout>
+</Window>
