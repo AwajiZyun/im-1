@@ -33,11 +33,6 @@ public class UpdateRegisterInfoHandler extends SimpleChannelInboundHandler<Updat
     private UserService userService;
 
     @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-        System.out.println("active");
-    }
-
-    @Override
     protected void channelRead0(ChannelHandlerContext ctx, UpdateRegisterInfoRequestPacket msg) throws Exception {
         String currentUserCode = ctx.channel().attr(AttributeKeyConsts.code).get();
         if (!currentUserCode.equals(msg.getCode())) {
