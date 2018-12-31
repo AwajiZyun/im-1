@@ -1,9 +1,9 @@
 package com.zh.mapper;
 
+import com.zh.domain.user.UpdateUserDTO;
 import com.zh.domain.user.UserPO;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,4 +24,6 @@ public interface UserMapper {
     UserPO selectByCodeAndPassword(@Param("code") String code, @Param("password") String password);
 
     UserPO selectByEmail(String email);
+
+    Integer update(UpdateUserDTO updateUserDTO);
 }

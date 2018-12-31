@@ -1,6 +1,7 @@
 package com.zh.service;
 
 import com.zh.domain.friend.AddFriendDTO;
+import com.zh.domain.friend.DeleteFriendDTO;
 import com.zh.domain.friend.FriendsPO;
 import com.zh.domain.user.UserDTO;
 import com.zh.domain.user.UserPO;
@@ -34,18 +35,8 @@ public class FriendService {
         if (userPO == null) {
             throw new UserNotFoundException();
         }
-        // 保证userCode < friendCode
-        String userCode = addFriendDTO.getUserCode();
-        String friendCode = userPO.getCode();
-        FriendsPO friendsPO = new FriendsPO();
+        FriendsPO friendsPO = newFriendPO(addFriendDTO.getUserCode(), userPO.getCode());
         friendsPO.setCreateTime(new Date());
-        if (userCode.compareTo(friendCode) > 0) {
-            friendsPO.setUserCode(friendCode);
-            friendsPO.setFriendCode(userCode);
-        } else {
-            friendsPO.setUserCode(userCode);
-            friendsPO.setFriendCode(friendCode);
-        }
         FriendsPO existFriendPO = friendsMapper.select(friendsPO);
         if (existFriendPO == null) {
             friendsPO.setId(IDUtil.uuid());
@@ -54,6 +45,19 @@ public class FriendService {
         UserDTO userDTO = new UserDTO();
         BeanUtils.copyProperties(userPO, userDTO);
         return userDTO;
+    }
+
+    private FriendsPO newFriendPO(String code, String otherCode) {
+        // 保证userCode < friendCode
+        FriendsPO friendsPO = new FriendsPO();
+        if (code.compareTo(otherCode) > 0) {
+            friendsPO.setUserCode(otherCode);
+            friendsPO.setFriendCode(code);
+        } else {
+            friendsPO.setUserCode(code);
+            friendsPO.setFriendCode(otherCode);
+        }
+        return friendsPO;
     }
 
     public List<UserDTO> listFriends(String code) {
@@ -77,5 +81,11 @@ public class FriendService {
             return result;
         }
         return new ArrayList<>(0);
+    }
+
+    @Transactional
+    public int delete(DeleteFriendDTO friendDTO) {
+        FriendsPO friendsPO = newFriendPO(friendDTO.getUserCode(), friendDTO.getFriendCode());
+        return friendsMapper.delete(friendsPO.getUserCode(), friendsPO.getFriendCode());
     }
 }

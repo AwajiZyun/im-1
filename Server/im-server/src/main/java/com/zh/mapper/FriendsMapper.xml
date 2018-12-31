@@ -32,4 +32,8 @@
         from  friends
         where userCode = #{userCode} and friendCode = #{friendCode}
     </select>
+
+    <delete id="delete" parameterType="java.lang.String">
+        delete from friends where userCode = #{userCode} and friendCode = #{friendCode}
+    </delete>
 </mapper>
