@@ -1,6 +1,7 @@
 package com.zh.mapper;
 
 import com.zh.domain.friend.FriendsPO;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ public interface FriendsMapper {
     FriendsPO select(FriendsPO friendsPO);
 
     List<FriendsPO> selectByCode(String code);
+
+    int delete(@Param("userCode") String userCode, @Param("friendCode") String friendCode);
 }
