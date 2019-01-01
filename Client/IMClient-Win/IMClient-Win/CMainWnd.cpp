@@ -62,9 +62,6 @@ void CMainWnd::Notify(TNotifyUI& msg)
 			MessageBox(nullptr, L"Not ready", L"Information", MB_ICONINFORMATION);
 		}
 	}
-	else if (msg.sType == DUI_MSGTYPE_ITEMACTIVATE) {
-		//OnFriendSelected();
-	}
 	else if (msg.sType == DUI_MSGTYPE_MENU) {
 		if (msg.pSender == m_pListFriend) {
 			OnMenu(msg);
@@ -81,199 +78,6 @@ void CMainWnd::Notify(TNotifyUI& msg)
 }
 
 #pragma region Sys message handler
-#if 0
-// Sys msg
-LRESULT CMainWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	LRESULT lRes = 0;
-	BOOL bHandled = TRUE;
-
-	switch (uMsg) {
-	case WM_CREATE:
-		lRes = OnCreate(uMsg, wParam, lParam, bHandled); break;
-	case WM_CLOSE:
-		lRes = OnClose(uMsg, wParam, lParam, bHandled); break;
-	case WM_DESTROY:
-		lRes = OnDestroy(uMsg, wParam, lParam, bHandled); break;
-	case WM_NCACTIVATE:
-		lRes = OnNcActivate(uMsg, wParam, lParam, bHandled); break;
-	case WM_NCHITTEST:
-		lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
-	case WM_SIZE:
-		lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
-	case WM_GETMINMAXINFO:
-		lRes = OnGetMinMaxInfo(uMsg, wParam, lParam, bHandled); break;
-	case WM_SYSCOMMAND:
-		lRes = OnSysCommand(uMsg, wParam, lParam, bHandled); break;
-	case WM_SEND_MESSAGE_REQUEST:
-		lRes = OnSendMessageRequest(uMsg, wParam, lParam, bHandled); break;
-	case WM_SEND_MESSAGE_RESPONSE:
-		lRes = OnSendMessageResponse(wParam); break;
-	case WM_ADD_FRIEND_RESPONSE:
-		lRes = OnAddFriendResponse(wParam); break;
-	case WM_UPDATE_FRIEND_LIST_RESPONSE:
-		lRes = OnUpdateFriendListResponse(uMsg, wParam, lParam, bHandled); break;
-	case WM_UPDATE_FRIEND_INFO_RESPONSE:
-		lRes = OnUpdateFriendInfoResponse(wParam); break;
-	case WM_ADD_FRIEND_PUSH:
-		lRes = OnAddFriendPush(wParam); break;
-	case WM_ONLINE_INFO_PUSH:
-		lRes = OnOnlineInfoPush(wParam); break;
-	case WM_SHOW_FRIEND_INFO:
-		lRes = OnShowFriendInfo(uMsg, wParam, lParam, bHandled); break;
-	case WM_DELETE_FRIEND:
-		lRes = OnDeleteFriend(uMsg, wParam, lParam, bHandled); break;
-	case WM_TIMER:
-		lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
-	default:
-		bHandled = FALSE;
-	}
-	if (bHandled) {
-		return lRes;
-	}
-	if (m_PaintManager.MessageHandler(uMsg, wParam, lParam, lRes)) {
-		return lRes;
-	}
-	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
-}
-
-LRESULT CMainWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
-	styleValue &= ~WS_CAPTION;
-	::SetWindowLong(*this, GWL_STYLE, styleValue | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
-	g_hWndMain = m_hWnd;
-
-	m_PaintManager.Init(m_hWnd);
-	CDialogBuilder builder;
-	CControlUI* pRoot = builder.Create(L"xml\\MainWnd.xml", (UINT)0, (UINT)0, &m_PaintManager);
-	if (!pRoot) {
-		return 0;
-	}
-	m_PaintManager.AttachDialog(pRoot);
-	m_PaintManager.AddNotifier(this);
-
-	m_pBtnMinimize = static_cast<CButtonUI*>(m_PaintManager.FindControl(L"btnMin"));
-	m_pBtnClose = static_cast<CButtonUI*>(m_PaintManager.FindControl(L"btnClose"));
-	m_pBtnSetting = static_cast<CButtonUI*>(m_PaintManager.FindControl(L"btnSetting"));
-	m_pBtnSendMsg = static_cast<CButtonUI*>(m_PaintManager.FindControl(L"btnSendMsg"));
-	m_pEditMsg = static_cast<CRichEditUI*>(m_PaintManager.FindControl(L"richEdit"));
-	m_pListDialog = static_cast<CListUI*>(m_PaintManager.FindControl(L"lstDialog"));
-	m_pListFriend = static_cast<CListUI*>(m_PaintManager.FindControl(L"lstFriends"));
-	m_pEditSearch = static_cast<CEditUI*>(m_PaintManager.FindControl(L"editSearch"));
-	m_pBtnHead = static_cast<CButtonUI*>(m_PaintManager.FindControl(L"btnHeadImg"));
-	m_pBtnAddFriend = static_cast<CButtonUI*>(m_PaintManager.FindControl(L"btnSearch"));
-	if (!m_pBtnMinimize || !m_pBtnClose || !m_pBtnSetting || !m_pBtnSendMsg || !m_pEditMsg || !m_pListDialog 
-		|| !m_pListFriend || !m_pEditSearch || !m_pBtnHead || !m_pBtnAddFriend) {
-		return -1;
-	}
-
-	::SetTimer(m_hWnd, TIMER_ID_HEARTBEAT, TIMER_ELAPSE_HEARTBEAT, nullptr);
-	// Send update friend list request
-	if (NET_WORKER_STATE_CONNECTED == g_pNetWorker->GetCurState()) {
-		g_pNetWorker->UpdateFriendList();
-	}
-	// Update head UI
-	if (0 == g_accountInfo.sex) {
-		m_pBtnHead->SetNormalImage(L"HeadMale.png");
-		m_pBtnHead->SetHotImage(L"HeadMaleHot.png");
-		m_pBtnHead->SetPushedImage(L"HeadMale.png");
-	}
-	else if (1 == g_accountInfo.sex) {
-		m_pBtnHead->SetNormalImage(L"HeadFemale.png");
-		m_pBtnHead->SetHotImage(L"HeadFemaleHot.png");
-		m_pBtnHead->SetPushedImage(L"HeadFemale.png");
-	}
-	else {
-		m_pBtnHead->SetNormalImage(L"Anonymous.png");
-		m_pBtnHead->SetHotImage(L"AnonymousHot.png");
-		m_pBtnHead->SetPushedImage(L"Anonymous.png");
-	}
-
-	return 0;
-}
-
-LRESULT CMainWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	::PostQuitMessage(0L);
-	bHandled = FALSE;
-	return 0;
-}
-
-LRESULT CMainWnd::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	if (::IsIconic(*this)) bHandled = FALSE;
-	return (wParam == 0) ? TRUE : FALSE;
-}
-
-LRESULT CMainWnd::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	POINT pt; pt.x = GET_X_LPARAM(lParam); pt.y = GET_Y_LPARAM(lParam);
-	::ScreenToClient(*this, &pt);
-
-	RECT rcClient;
-	::GetClientRect(*this, &rcClient);
-
-	RECT rcCaption = m_PaintManager.GetCaptionRect();
-	if (pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right \
-		&& pt.y >= rcCaption.top && pt.y < rcCaption.bottom) {
-		CControlUI* pControl = static_cast<CControlUI*>(m_PaintManager.FindControl(pt));
-		if (pControl && _tcscmp(pControl->GetClass(), DUI_CTR_BUTTON) != 0 &&
-			_tcscmp(pControl->GetClass(), DUI_CTR_OPTION) != 0 &&
-			_tcscmp(pControl->GetClass(), DUI_CTR_TEXT) != 0)
-			return HTCAPTION;
-	}
-
-	return HTCLIENT;
-}
-
-LRESULT CMainWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	SIZE szRoundCorner = m_PaintManager.GetRoundCorner();
-	if (!::IsIconic(*this) && (szRoundCorner.cx != 0 || szRoundCorner.cy != 0)) {
-		CDuiRect rcWnd;
-		::GetWindowRect(*this, &rcWnd);
-		rcWnd.Offset(-rcWnd.left, -rcWnd.top);
-		rcWnd.right++; rcWnd.bottom++;
-		HRGN hRgn = ::CreateRoundRectRgn(rcWnd.left, rcWnd.top, rcWnd.right, rcWnd.bottom, szRoundCorner.cx, szRoundCorner.cy);
-		::SetWindowRgn(*this, hRgn, TRUE);
-		::DeleteObject(hRgn);
-	}
-
-	bHandled = FALSE;
-	return 0;
-}
-
-LRESULT CMainWnd::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	MONITORINFO oMonitor = {};
-	oMonitor.cbSize = sizeof(oMonitor);
-	::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
-	CDuiRect rcWork = oMonitor.rcWork;
-	rcWork.Offset(-oMonitor.rcMonitor.left, -oMonitor.rcMonitor.top);
-
-	LPMINMAXINFO lpMMI = (LPMINMAXINFO)lParam;
-	lpMMI->ptMaxPosition.x = rcWork.left;
-	lpMMI->ptMaxPosition.y = rcWork.top;
-	lpMMI->ptMaxSize.x = rcWork.right;
-	lpMMI->ptMaxSize.y = rcWork.bottom;
-
-	bHandled = FALSE;
-	return 0;
-}
-
-LRESULT CMainWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	if (wParam == SC_CLOSE) {
-		::PostQuitMessage(0L);
-		bHandled = TRUE;
-		return 0;
-	}
-	LRESULT lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
-
-	return lRes;
-}
-#endif
 void CMainWnd::InitWindow()
 {
 	g_hWndMain = m_hWnd;
@@ -355,6 +159,10 @@ LRESULT CMainWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 		lRes = OnShowFriendInfo(uMsg, wParam, lParam, bHandled); break;
 	case WM_DELETE_FRIEND:
 		lRes = OnDeleteFriend(uMsg, wParam, lParam, bHandled); break;
+	case WM_DELETE_FRIEND_RESPONSE:
+		lRes = OnDeleteFriendResponse(uMsg, wParam, lParam, bHandled); break;
+	case WM_DELETE_FRIEND_PUSH:
+		lRes = OnDeleteFriendPush(uMsg, wParam, lParam, bHandled); break;
 	case WM_TIMER:
 		lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
 	default:
@@ -380,6 +188,11 @@ LRESULT CMainWnd::OnTimer(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 		if (NET_WORKER_STATE_CONNECTED == g_pNetWorker->GetCurState()) {
 			g_pNetWorker->SendHeartbeat();
 		}
+		break;
+	case TIMER_ID_UPDATE_FRIEND_INFO:
+		bHandled = true;
+		::KillTimer(m_hWnd, TIMER_ID_UPDATE_FRIEND_INFO);
+		MessageBox(nullptr, L"服务器响应超时", L"提示", MB_ICONINFORMATION);
 		break;
 	default:
 		break;
@@ -474,7 +287,8 @@ LRESULT CMainWnd::OnBtnAddFriend()
 	}
 	int ret = g_pNetWorker->AddFriend(strFriendID.GetData());
 	if (0 == ret) {
-		MessageBox(nullptr, L"已发送好友申请", L"提示", MB_ICONINFORMATION);
+		// Wait for response
+		//MessageBox(nullptr, L"已发送好友申请", L"提示", MB_ICONINFORMATION);
 	}
 	else {
 		MessageBox(nullptr, L"未连接服务器", L"提示", MB_ICONINFORMATION);
@@ -580,15 +394,20 @@ LRESULT CMainWnd::OnMenu(TNotifyUI& msg)
 LRESULT CMainWnd::OnShowFriendInfo(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	bHandled = true;
+	
 	ST_ACCOUNT_INFO accountInfo = { 0 };
 	memcpy_s(&accountInfo, sizeof(accountInfo), &g_vecFriendList[m_pListFriend->GetCurSel()], sizeof(accountInfo));
 	if (wstring(accountInfo.ID).empty()) {
 		return -1;
 	}
-	CFriendInfoWnd* pFriendWnd = new CFriendInfoWnd(accountInfo);
-	pFriendWnd->Create(m_hWnd, L"FriendInfoWnd", UI_WNDSTYLE_DIALOG, UI_WNDSTYLE_EX_FRAME);
-	pFriendWnd->CenterWindow();
-	pFriendWnd->ShowModal();
+	int ret = g_pNetWorker->UpdateFriendInfo(accountInfo.ID);
+	if (0 == ret){
+		// Wait for response
+		::SetTimer(m_hWnd, TIMER_ID_UPDATE_FRIEND_INFO, TIMER_ELAPSE_UPDATE_FRIEND_INFO, nullptr);
+	}
+	else {
+		MessageBox(nullptr, L"未连接服务器", L"提示", MB_ICONINFORMATION);
+	}
 
 	return 0;
 }
@@ -597,11 +416,13 @@ LRESULT CMainWnd::OnShowFriendInfo(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL
 LRESULT CMainWnd::OnDeleteFriend(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	bHandled = true;
+	LRESULT ret = 0;
 	WCHAR warning[128] = { 0 };
 	swprintf_s(warning, L"删除好友%s(%s)？", g_vecFriendList[m_pListFriend->GetCurSel()].nickName,
 		g_vecFriendList[m_pListFriend->GetCurSel()].ID);
 	if (IDYES == MessageBox(nullptr, warning, L"警告", MB_ICONWARNING | MB_YESNOCANCEL)) {
-		// TODO:
+		ret = g_pNetWorker->DelFriend(g_vecFriendList[m_pListFriend->GetCurSel()].ID);
+		g_vecFriendList[m_pListFriend->GetCurSel()].deleted = true;
 	}
 	return 0;
 }
@@ -610,6 +431,7 @@ LRESULT CMainWnd::OnDeleteFriend(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& 
 /*
  * network message handler
  */
+// Update friend list response handler
 LRESULT CMainWnd::OnUpdateFriendListResponse(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	int ret = 0;
@@ -680,6 +502,62 @@ LRESULT CMainWnd::OnUpdateFriendListResponse(UINT uMSg, WPARAM wParam, LPARAM lP
 	delete[] pWJsonString;
 	pJsonString = reinterpret_cast<char*>(pStDataHead);
 	delete[] pJsonString;
+
+	return ret;
+}
+
+// Update friend information response handler
+LRESULT CMainWnd::OnUpdateFriendResponse(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	::KillTimer(m_hWnd, TIMER_ID_UPDATE_FRIEND_INFO);
+	LRESULT ret = 0;
+	ST_DATA_HEAD* pStDataHead = reinterpret_cast<ST_DATA_HEAD*>(wParam);
+	if (!pStDataHead) {
+		return -1;
+	}
+	char* pJsonString = reinterpret_cast<char*>(pStDataHead) + sizeof(ST_DATA_HEAD);
+	WCHAR* pWJsonString = CUtility::Utf8ToUtf16(pJsonString);
+	char* pAnsiJsonString = CUtility::Utf16ToGB(pWJsonString);
+	// Parse json string
+	Json::CharReaderBuilder builder;
+	Json::CharReader * reader = builder.newCharReader();
+	Json::Value root;
+	string errors;
+
+	ST_ACCOUNT_INFO stAccountInfo = { 0 };
+	if (reader->parse(pAnsiJsonString, pAnsiJsonString + strlen(pAnsiJsonString), &root, &errors)) {
+		if (!root["data"].isNull()) {
+			Json::Value data = root["data"];
+			WCHAR* wCode = CUtility::GBToUtf16(data["code"].asString().data());
+			for (auto& friendInfo : g_vecFriendList) {
+				if (0 == wcscmp(friendInfo.ID, wCode)) {
+					WCHAR* wEmail = CUtility::GBToUtf16(data["email"].asString().data());
+					WCHAR* wNickname = CUtility::GBToUtf16(data["nickname"].asString().data());
+					friendInfo.sex = data["sex"].asInt();
+					friendInfo.online = data["online"].asInt();
+					memcpy_s(friendInfo.ID, sizeof(friendInfo.ID), wCode, wcslen(wCode) * sizeof(WCHAR));
+					memcpy_s(friendInfo.email, sizeof(friendInfo.email), wEmail, wcslen(wEmail) * sizeof(WCHAR));
+					memcpy_s(friendInfo.nickName, sizeof(friendInfo.nickName), wNickname, wcslen(wNickname) * sizeof(WCHAR));
+					delete[] wCode;
+					delete[] wEmail;
+					delete[] wNickname;
+					stAccountInfo = friendInfo;
+				}
+			}
+		}
+	}
+
+	delete[] reader;
+	delete[] pAnsiJsonString;
+	delete[] pWJsonString;
+	pJsonString = reinterpret_cast<char*>(pStDataHead);
+	delete[] pJsonString;
+
+	// Show friend info dialog
+	CFriendInfoWnd* pFriendWnd = new CFriendInfoWnd(stAccountInfo);
+	pFriendWnd->Create(m_hWnd, L"FriendInfoWnd", UI_WNDSTYLE_DIALOG, UI_WNDSTYLE_EX_FRAME);
+	pFriendWnd->CenterWindow();
+	pFriendWnd->ShowModal();
 
 	return ret;
 }
@@ -779,6 +657,7 @@ LRESULT CMainWnd::OnSendMessageRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, 
 	return 0;
 }
 
+// Send message response handler
 LRESULT CMainWnd::OnSendMessageResponse(WPARAM wParam)
 {
 	int ret = 0;
@@ -816,6 +695,7 @@ LRESULT CMainWnd::OnSendMessageResponse(WPARAM wParam)
 	return ret;
 }
 
+// Add friend response handler
 LRESULT CMainWnd::OnAddFriendResponse(WPARAM wParam)
 {
 	int ret = 0;
@@ -950,6 +830,58 @@ LRESULT CMainWnd::OnUpdateFriendInfoResponse(WPARAM wParam)
 	return ret;
 }
 
+// Delete friend response handler
+LRESULT CMainWnd::OnDeleteFriendResponse(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	int ret = 0;
+	ST_DATA_HEAD* pStDataHead = reinterpret_cast<ST_DATA_HEAD*>(wParam);
+	if (!pStDataHead) {
+		return -1;
+	}
+	char* pJsonString = reinterpret_cast<char*>(pStDataHead) + sizeof(ST_DATA_HEAD);
+	WCHAR* pWJsonString = CUtility::Utf8ToUtf16(pJsonString);
+	char* pAnsiJsonString = CUtility::Utf16ToGB(pWJsonString);
+	// Parse json string
+	Json::CharReaderBuilder builder;
+	Json::CharReader * reader = builder.newCharReader();
+	Json::Value root;
+	string errors;
+	bool bSuccess;
+	if (reader->parse(pAnsiJsonString, pAnsiJsonString + strlen(pAnsiJsonString), &root, &errors)) {
+		if (!root["success"].isNull()) {
+			bSuccess = root["success"].asBool();
+		}
+	}
+	if (bSuccess) {
+		// Update friend list
+		// TODO: The deleting friend response should be sent with user ID
+		int delIdx = 0;
+		for (auto iter = g_vecFriendList.begin(); iter != g_vecFriendList.end(); ) {
+			if (iter->deleted) {
+				g_vecFriendList.erase(iter);
+				break;
+			}
+			else {
+				++iter;
+				++delIdx;
+			}
+		}
+		// Update friend list UI
+		m_pListFriend->Remove(m_pListFriend->GetItemAt(delIdx));
+	}
+	else {
+		MessageBox(nullptr, L"删除好友失败", L"错误", MB_ICONERROR);
+	}
+
+	delete[] reader;
+	delete[] pAnsiJsonString;
+	delete[] pWJsonString;
+	pJsonString = reinterpret_cast<char*>(pStDataHead);
+	delete[] pJsonString;
+
+	return ret;
+}
+
 // Add friend pushing handler
 LRESULT CMainWnd::OnAddFriendPush(WPARAM wParam)
 {
@@ -1068,6 +1000,52 @@ LRESULT CMainWnd::OnOnlineInfoPush(WPARAM wParam)
 	}
 	else {
 		;
+	}
+
+	delete[] reader;
+	delete[] pAnsiJsonString;
+	delete[] pWJsonString;
+	pJsonString = reinterpret_cast<char*>(pStDataHead);
+	delete[] pJsonString;
+
+	return ret;
+}
+
+// Delete friend push handler
+LRESULT CMainWnd::OnDeleteFriendPush(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	LRESULT ret = 0;
+	ST_DATA_HEAD* pStDataHead = reinterpret_cast<ST_DATA_HEAD*>(wParam);
+	if (!pStDataHead) {
+		return -1;
+	}
+	char* pJsonString = reinterpret_cast<char*>(pStDataHead) + sizeof(ST_DATA_HEAD);
+	WCHAR* pWJsonString = CUtility::Utf8ToUtf16(pJsonString);
+	char* pAnsiJsonString = CUtility::Utf16ToGB(pWJsonString);
+	// Parse json string
+	Json::CharReaderBuilder builder;
+	Json::CharReader * reader = builder.newCharReader();
+	Json::Value root;
+	string errors;
+	if (reader->parse(pAnsiJsonString, pAnsiJsonString + strlen(pAnsiJsonString), &root, &errors)) {
+		if (!root["code"].isNull()) {
+			string code = root["code"].asString();
+			WCHAR* wCode = CUtility::GBToUtf16(code.data());
+			// Update friend list
+			int delIdx = 0;
+			for (auto iter = g_vecFriendList.begin(); iter != g_vecFriendList.end(); ) {
+				if (0 == wcscmp(wCode, iter->ID)) {
+					g_vecFriendList.erase(iter);
+					break;
+				}
+				else {
+					++iter;
+					++delIdx;
+				}
+			}
+			// Update friend list UI
+			m_pListFriend->Remove(m_pListFriend->GetItemAt(delIdx));
+		}
 	}
 
 	delete[] reader;

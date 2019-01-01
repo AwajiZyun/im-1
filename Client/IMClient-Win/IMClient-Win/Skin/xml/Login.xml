@@ -31,13 +31,13 @@
         <VerticalLayout> 
           <!-- User name-->
           <HorizontalLayout height="30">
-            <Edit name="editUsrName" width="160" height="30" tooltip="邮箱/用户ID" bordersize="1" bordercolor="FFC8C8C8" font="0"/>
-            <Control width="8" />
-            <Button name="btnRegist" cursor="hand" keyboard="false" width="100" text="注册账号" font="1" textcolor="FF51A4E1" />
+            <Combo name="comboUsrName" float="true" pos="0,0,160,30" tooltip="邮箱/用户ID" textpadding="5,0,0,0" normalimage="ComboNormal.png" hotimage="ComboNormal.png" pushedimage="ComboPush.png" itemtextpadding="5,0,0,0" />
+            <Edit name="editUsrName" float="true" pos="2,2,140,28" tooltip="邮箱/用户ID" bordersize="0" bordercolor="00FFFFFF" font="0"/>
+            <Button name="btnRegist" cursor="hand" keyboard="false" float="true" pos="168,0,268,30" text="注册账号" font="1" textcolor="FF51A4E1" />
           </HorizontalLayout> 
           <!-- Password -->
           <HorizontalLayout height="38">
-            <Edit name="editPassword" width="160" height="30" tooltip="密码" bordersize="1" bordercolor="FFC8C8C8" password="true" font="0"/>
+            <Edit name="editPassword" width="160" height="30" tooltip="密码" bkimage="EditPwdBorder.png" password="true" font="0"/>
             <Control width="8" />
             <Button name="btnForgetPwd" cursor="hand" keyboard="false"  width="100" text="忘记密码" font="1" textcolor="FF51A4E1" />
           </HorizontalLayout>

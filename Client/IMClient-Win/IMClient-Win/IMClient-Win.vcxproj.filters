@@ -28,6 +28,9 @@
     <Filter Include="Header Files\json">
       <UniqueIdentifier>{4a414432-d793-4d29-b0a7-b5effd572e3e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\xml">
+      <UniqueIdentifier>{c35948aa-0b7b-48f7-b428-2d5625b1c385}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -107,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="Base64.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tinyxml2\tinyxml2.h">
+      <Filter>Source Files\xml</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

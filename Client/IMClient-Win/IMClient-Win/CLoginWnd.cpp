@@ -91,7 +91,7 @@ void CLoginWnd::Notify(TNotifyUI& msg)
 			return;
 		}
 		else if (msg.pSender == m_pBtnSetting) {
-			MessageBox(nullptr, L"IM Demo Ver0.1 alpha\nCopyright(C) 2018", L"Setting", 0);
+			MessageBox(nullptr, L"IM Demo Ver0.1.1 alpha\nCopyright(C) 2018", L"Setting", 0);
 			return;
 		}
 		else if (msg.pSender == m_pBtnRegist) {
@@ -113,6 +113,9 @@ void CLoginWnd::Notify(TNotifyUI& msg)
 		else if (msg.pSender == m_pOptionAutoLogin) {
 			OnBtnAutoLogin();
 		}
+	}
+	else if (msg.sType == DUI_MSGTYPE_ITEMSELECT) {
+		OnComboUsrNameSelected();
 	}
 	else {
 		// nothing
@@ -298,17 +301,30 @@ int CLoginWnd::InitControls()
 	m_pEditUsrPwd = static_cast<CEditUI*>(m_pm.FindControl(L"editPassword"));
 	m_pOptionSavePwd = static_cast<COptionUI*>(m_pm.FindControl(L"optionSavePwd"));
 	m_pOptionAutoLogin = static_cast<COptionUI*>(m_pm.FindControl(L"optionAutoLogin"));
+	m_pComboUsrName = static_cast<CComboUI*>(m_pm.FindControl(L"comboUsrName"));
 
 	if (m_pBtnSetting && m_pBtnMinimize && m_pBtnClose && m_pBtnLogin && m_pBtnRegist && m_pBtnForgetPwd &&
-		m_pEditUsrCode && m_pEditUsrPwd && m_pOptionSavePwd && m_pOptionAutoLogin && m_pCtlHeadImg) {
+		m_pEditUsrCode && m_pEditUsrPwd && m_pOptionSavePwd && m_pOptionAutoLogin && m_pCtlHeadImg && m_pComboUsrName) {
+		// load xml data
+		if (0 == CUtility::GetXmlUsrInfo(L".\\UsrData\\Public\\usrInfo.xml", m_vecLoginUsrInfo)) {
+			for (auto info : m_vecLoginUsrInfo) {
+				CListLabelElementUI* pLabel = new CListLabelElementUI();
+				pLabel->SetText(info.ID);
+				m_pComboUsrName->Add(pLabel);
+			}
+		}
+		if (!m_vecLoginUsrInfo.empty()) {
+			m_pComboUsrName->SelectItem(0);
+		}
+
 		if (1 == ::GetPrivateProfileIntW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_SAVE_PWD, 0, CFG_PUBLIC_CFG_FILE)) {
 			WCHAR wUsrID[32] = { 0 };
 			WCHAR wPwd[32] = { 0 };
 			::GetPrivateProfileStringW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_ACCOUNT_ID, L"", wUsrID, sizeof(wUsrID), CFG_PUBLIC_CFG_FILE);
 			::GetPrivateProfileStringW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_ACCOUNT_PWD, L"", wPwd, sizeof(wPwd), CFG_PUBLIC_CFG_FILE);
 			int sex = ::GetPrivateProfileInt(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_ACCOUNT_SEX, 0, CFG_PUBLIC_CFG_FILE);
-			m_pEditUsrCode->SetText(wUsrID);
-			m_pEditUsrPwd->SetText(wPwd);
+			//m_pEditUsrCode->SetText(wUsrID);
+			//m_pEditUsrPwd->SetText(wPwd);
 			m_pOptionSavePwd->Selected(true, false);
 			if (0 == sex) {
 				m_pCtlHeadImg->SetBkImage(L"HeadMale.png");
@@ -363,6 +379,12 @@ LRESULT CLoginWnd::OnBtnLogin()
 			MessageBox(nullptr, L"服务器连接失败", L"提示", MB_ICONINFORMATION);
 			ret = -2;
 		}
+
+		// Write xml
+		ST_ACCOUNT_INFO stAccountInfo = { 0 };
+		memcpy_s(stAccountInfo.ID, sizeof(stAccountInfo.ID), usrName, wcslen(usrName) * sizeof(WCHAR));
+		memcpy_s(stAccountInfo.pwd, sizeof(stAccountInfo.pwd), usrPwd, wcslen(usrPwd) * sizeof(WCHAR));
+		ret = CUtility::WriteXmlUsrInfo(L".\\UsrData\\Public\\usrInfo.xml", stAccountInfo);
 	}
 
 	return ret;
@@ -407,6 +429,20 @@ LRESULT CLoginWnd::OnBtnAutoLogin()
 	return 0;
 }
 
+LRESULT CLoginWnd::OnComboUsrNameSelected()
+{
+	if (!m_pComboUsrName || !m_pEditUsrCode) {
+		return -1;
+	}
+	// Load account ID
+	m_pEditUsrCode->SetText(m_pComboUsrName->GetText());
+	if (1 == ::GetPrivateProfileIntW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_SAVE_PWD, 0, CFG_PUBLIC_CFG_FILE)) {
+		// Load account password
+		m_pEditUsrPwd->SetText(m_vecLoginUsrInfo[m_pComboUsrName->GetCurSel()].pwd);
+	}
+	return 0;
+}
+
 // Server login response handler
 LRESULT CLoginWnd::OnLoginResponse(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -442,9 +478,7 @@ LRESULT CLoginWnd::OnLoginResponse(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 			memcpy_s(g_accountInfo.ID, sizeof(g_accountInfo.ID), wCode, wcslen(wCode) * sizeof(WCHAR));
 			memcpy_s(g_accountInfo.email, sizeof(g_accountInfo.email), wEmail, wcslen(wEmail) * sizeof(WCHAR));
 			memcpy_s(g_accountInfo.nickName, sizeof(g_accountInfo.nickName), wNickname, wcslen(wNickname) * sizeof(WCHAR));
-			delete[] wCode;
-			delete[] wEmail;
-			delete[] wNickname;
+
 			WCHAR savePath[MAX_PATH] = { 0 };
 			swprintf_s(savePath, L"UsrData\\Accounts\\%s", g_accountInfo.ID);
 			::CreateDirectory(savePath, nullptr);
@@ -459,6 +493,10 @@ LRESULT CLoginWnd::OnLoginResponse(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 			WCHAR strSex[4] = { 0 };
 			_itow_s(g_accountInfo.sex, strSex, 10);
 			::WritePrivateProfileStringW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_ACCOUNT_SEX, strSex, CFG_PUBLIC_CFG_FILE);
+
+			delete[] wCode;
+			delete[] wEmail;
+			delete[] wNickname;
 		}
 
 		// Create main dialog

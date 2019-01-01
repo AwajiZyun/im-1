@@ -10,6 +10,7 @@ public:
 	virtual void InitWindow();
 	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	virtual void OnFinalMessage(HWND hWnd);
+	LRESULT CUsrInfoWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	//virtual UINT GetClassStyle() const { return UI_CLASSSTYLE_FRAME | CS_DBLCLKS; };
 	//virtual LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 	

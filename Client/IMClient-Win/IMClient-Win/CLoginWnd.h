@@ -26,6 +26,7 @@ public:
 	LRESULT OnBtnLogin();
 	LRESULT OnLoginResponse(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  bHandled);
 	LRESULT OnBtnRegist();
+	LRESULT OnComboUsrNameSelected();
 
 	LRESULT OnBtnSavePwd();
 	LRESULT OnBtnAutoLogin();
@@ -33,6 +34,7 @@ public:
 	int InitControls();
 
 private:
+	CComboUI* m_pComboUsrName;
 	CControlUI* m_pCtlHeadImg;
 	CButtonUI* m_pBtnSetting;
 	CButtonUI* m_pBtnMinimize;
@@ -49,5 +51,6 @@ private:
 	COptionUI* m_pOptionAutoLogin;
 
 	bool m_bExitProcess;
+	vector<ST_ACCOUNT_INFO> m_vecLoginUsrInfo;
 };
 

@@ -6,7 +6,7 @@ class CFriendInfoWnd : public WindowImplBase
 protected:
 	virtual ~CFriendInfoWnd() {};
 public:
-	CFriendInfoWnd(ST_ACCOUNT_INFO accountInfo);
+	CFriendInfoWnd(const ST_ACCOUNT_INFO& accountInfo);
 
 	virtual LPCTSTR GetWindowClassName() const { return L"FriendInfoWnd"; }
 	virtual CDuiString GetSkinFile() { return _T("xml\\FriendInfo.xml"); }

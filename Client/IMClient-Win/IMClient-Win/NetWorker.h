@@ -25,7 +25,8 @@ typedef struct ST_SEND_DATA_T
 	ULONG bufSize;
 }ST_SEND_DATA;
 
-typedef struct ST_MESSAGE_INFO_T 
+// Structure
+typedef struct ST_MESSAGE_INFO_T
 {
 	SYSTEMTIME timeStamp;
 	wstring content;
@@ -43,6 +44,8 @@ typedef struct ST_ACCOUNT_INFO_T
 	UINT online;
 	wstring draftMsg;
 	vector<ST_MESSAGE_INFO> friendMsg;
+	bool deleted;
+	char resv[3];
 }ST_ACCOUNT_INFO;
 
 enum {
@@ -54,7 +57,7 @@ enum {
 	NET_MSG_TYPE_ADD_FRIEND_REQUEST = 0x0021,
 	NET_MSG_TYPE_UPDATE_FRIEND_LIST_REQUEST = 0x0022,
 	NET_MSG_TYPE_UPDATE_FRIEND_INFO_REQUEST = 0x0023,
-	NET_MSG_TYPE_DEL_FRIEND_REQUEST = 0x0024,
+	NET_MSG_TYPE_DELETE_FRIEND_REQUEST = 0x0024,
 
 	NET_MSG_TYPE_HEARTBEAT_REQUEST = 0x00F0,
 
@@ -70,6 +73,7 @@ enum {
 
 	NET_MSG_TYPE_ADD_FRIEND_PUSH = 0x1024,
 	NET_MSG_TYPE_ONLINE_INFO_PUSH = 0x1030,
+	NET_MSG_TYPE_DELETE_FRIEND_PUSH = 0x1032,
 
 	NET_MSG_TYPE_HEARTBEAT_RESPONSE = 0x10F0
 };
@@ -92,6 +96,7 @@ public:
 	int AddFriend(wstring code);
 	int UpdateFriendList();
 	int UpdateFriendInfo(wstring code);
+	int DelFriend(wstring code);
 
 	int SendHeartbeat();
 protected:
@@ -101,8 +106,6 @@ protected:
 private:
 	static UINT WINAPI ThreadRecvResponse(LPVOID param);
 	static UINT WINAPI ThreadSendRequest(LPVOID param);
-
-	long OnRequestLogin(char* sendData);
 
 private:
 	bool m_bStopThread;

@@ -127,6 +127,10 @@ UINT WINAPI CNetWorker::ThreadRecvResponse(LPVOID param)
 					cout << "case Online info push" << endl;
 					::PostMessage(g_hWndMain, WM_ONLINE_INFO_PUSH, reinterpret_cast<WPARAM>(pRecv), 0);
 					break;
+				case NET_MSG_TYPE_DELETE_FRIEND_PUSH:
+					cout << "case Online info push" << endl;
+					::PostMessage(g_hWndMain, WM_DELETE_FRIEND_PUSH, reinterpret_cast<WPARAM>(pRecv), 0);
+					break;
 				case NET_MSG_TYPE_HEARTBEAT_RESPONSE:
 					pNetWorker->m_nHeartbeatCnt = 0;
 					break;
@@ -292,17 +296,17 @@ int CNetWorker::UpdateAccount(wstring oldPassword, wstring pwd, wstring nickName
 {
 	// Create json data
 	wstring sendData =
-		wstring(L"{ \"oldPassword\": \"") + oldPassword + wstring(L"\",") +
-		wstring(L"  \"nickname\": \"") + nickName + wstring(L"\",") +
-		wstring(L"  \"sex\": ") + std::to_wstring(sex) + wstring(L"\",") +
-		wstring(L"  \"password\": \"") + pwd + wstring(L"\"}");
+		wstring(L"{\"oldPassword\":\"") + CUtility::RSAEncrypt(oldPassword) + wstring(L"\",") +
+		wstring(L"  \"nickname\":\"") + nickName + wstring(L"\",") +
+		wstring(L"  \"sex\":") + std::to_wstring(sex) + wstring(L",") +
+		wstring(L"  \"newPassword\":\"") + CUtility::RSAEncrypt(pwd) + wstring(L"\"}");
 	std::wcout << "UpdateAccount send data: " << sendData << std::endl;
-
+	
 	// UTF-16 -> UTF-8
 	char* pUtf8Data = CUtility::Utf16ToUtf8(sendData.data());
 
 	// Create send buffer
-	int totalLen = sizeof(ST_DATA_HEAD) + strlen(pUtf8Data) + 1;
+	int totalLen = sizeof(ST_DATA_HEAD) + strlen(pUtf8Data);
 	ST_DATA_HEAD stDataHead = { 0 };
 	stDataHead.magic[0] = 0x5A;
 	stDataHead.magic[1] = 0x48;
@@ -461,13 +465,52 @@ int CNetWorker::UpdateFriendInfo(wstring code)
 	char* pUtf8Data = CUtility::Utf16ToUtf8(sendData.data());
 
 	// Create send buffer
-	int totalLen = sizeof(ST_DATA_HEAD) + strlen(pUtf8Data) + 1;
+	int totalLen = sizeof(ST_DATA_HEAD) + strlen(pUtf8Data);
 	ST_DATA_HEAD stDataHead = { 0 };
 	stDataHead.magic[0] = 0x5A;
 	stDataHead.magic[1] = 0x48;
 	stDataHead.magic[2] = 0x48;
 	stDataHead.totalLen = htonl(strlen(pUtf8Data));
 	stDataHead.msgType = htons(NET_MSG_TYPE_UPDATE_FRIEND_INFO_REQUEST);
+	char* pSendBuffer = new char[totalLen];
+	memset(pSendBuffer, 0, totalLen);
+	memcpy_s(pSendBuffer, totalLen, &stDataHead, sizeof(stDataHead));
+	memcpy_s(pSendBuffer + sizeof(stDataHead), totalLen - sizeof(stDataHead), pUtf8Data, strlen(pUtf8Data));
+
+	// Send request
+	int ret = 0;
+	if (NET_WORKER_STATE_CONNECTED == GetCurState()) {
+		ret = SendMsg(pSendBuffer, totalLen);
+	}
+	else {
+		return -1;
+	}
+
+	delete[] pUtf8Data;
+	delete[] pSendBuffer;
+
+	return ret;
+}
+
+// Send deleting friend request
+int CNetWorker::DelFriend(wstring code)
+{
+	// Create json data
+	wstring sendData =
+		wstring(L"{ \"code\": \"") + code + wstring(L"\"}");
+	std::wcout << "DelFriend send data: " << sendData << std::endl;
+
+	// UTF-16 -> UTF-8
+	char* pUtf8Data = CUtility::Utf16ToUtf8(sendData.data());
+
+	// Create send buffer
+	int totalLen = sizeof(ST_DATA_HEAD) + strlen(pUtf8Data);
+	ST_DATA_HEAD stDataHead = { 0 };
+	stDataHead.magic[0] = 0x5A;
+	stDataHead.magic[1] = 0x48;
+	stDataHead.magic[2] = 0x48;
+	stDataHead.totalLen = htonl(strlen(pUtf8Data));
+	stDataHead.msgType = htons(NET_MSG_TYPE_DELETE_FRIEND_REQUEST);
 	char* pSendBuffer = new char[totalLen];
 	memset(pSendBuffer, 0, totalLen);
 	memcpy_s(pSendBuffer, totalLen, &stDataHead, sizeof(stDataHead));

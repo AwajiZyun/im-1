@@ -214,6 +214,8 @@ LRESULT CUsrInfoWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam
 	switch (uMsg) {
 	case WM_ACCOUNT_UPDATE_RESPONSE:
 		lRes = OnUpdateAccountResponse(wParam);	break;
+	case WM_TIMER:
+		lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
 	default:
 		bHandled = FALSE;
 	}
@@ -221,9 +223,23 @@ LRESULT CUsrInfoWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam
 	return lRes;
 }
 
+LRESULT CUsrInfoWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	if (TIMER_ID_UPDATE_ACCOUNT == wParam) {
+		bHandled = true;
+		::KillTimer(m_hWnd, TIMER_ID_UPDATE_ACCOUNT);
+		MessageBox(nullptr, L"服务器响应超时", L"错误", MB_ICONERROR);
+	}
+	else {
+		bHandled = false;
+	}
+	return 0;
+}
+
 // Receive update account response handle
 LRESULT CUsrInfoWnd::OnUpdateAccountResponse(WPARAM wParam)
 {
+	::KillTimer(m_hWnd, TIMER_ID_UPDATE_ACCOUNT);
 	int ret = 0;
 	ST_DATA_HEAD* pStDataHead = reinterpret_cast<ST_DATA_HEAD*>(wParam);
 	if (!pStDataHead) {
@@ -269,7 +285,7 @@ LRESULT CUsrInfoWnd::OnBtnUpdateAccount()
 		MessageBox(nullptr, L"未连接服务器", L"提示", MB_ICONINFORMATION);
 		return -1;
 	}
-
+	
 	CDuiString strNickName = m_pEditNickName->GetText();
 	CDuiString strSex = m_pComboSex->GetText();
 	CDuiString strOldPwd = m_pEditOldPwd->GetText();
@@ -291,6 +307,7 @@ LRESULT CUsrInfoWnd::OnBtnUpdateAccount()
 	}
 	ret = g_pNetWorker->UpdateAccount(strOldPwd.GetData(), strNewPwd.GetData(), strNickName.GetData(), nSex);
 	m_pBtnUpdate->SetEnabled(false);
+	::SetTimer(m_hWnd, TIMER_ID_UPDATE_ACCOUNT, TIMER_ELAPSE_UPDATE_ACCOUNT, nullptr);
 
 	return ret;
 }

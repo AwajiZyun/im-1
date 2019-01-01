@@ -2,7 +2,7 @@
 #include "CFriendInfoWnd.h"
 
 
-CFriendInfoWnd::CFriendInfoWnd(ST_ACCOUNT_INFO accountInfo)
+CFriendInfoWnd::CFriendInfoWnd(const ST_ACCOUNT_INFO& accountInfo)
 	: m_stAccountInfo(accountInfo)
 {
 }
