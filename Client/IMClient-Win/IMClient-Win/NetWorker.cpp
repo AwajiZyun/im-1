@@ -131,6 +131,10 @@ UINT WINAPI CNetWorker::ThreadRecvResponse(LPVOID param)
 					cout << "case Online info push" << endl;
 					::PostMessage(g_hWndMain, WM_DELETE_FRIEND_PUSH, reinterpret_cast<WPARAM>(pRecv), 0);
 					break;
+				case NET_MSG_TYPE_UPDATE_FRIEND_INFO_PUSH:
+					cout << "case Update friend info push" << endl;
+					::PostMessage(g_hWndMain, WM_UPDATE_FRIEND_INFO_PUSH, reinterpret_cast<WPARAM>(pRecv), 0);
+					break;
 				case NET_MSG_TYPE_HEARTBEAT_RESPONSE:
 					pNetWorker->m_nHeartbeatCnt = 0;
 					break;

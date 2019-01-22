@@ -23,6 +23,8 @@ void CFriendInfoWnd::InitWindow()
 	m_pEditSex->SetText(0 == m_stAccountInfo.sex ? L"ÄÐ" :
 		1 == m_stAccountInfo.sex ? L"Å®" : L"ÆäËû");
 	m_pEditEmail->SetText(m_stAccountInfo.email);
+	m_pCtlHeadImg->SetBkImage(0 == m_stAccountInfo.sex ? L"HeadMale.png" :
+		1 == m_stAccountInfo.sex ? L"HeadFemale.png" : L"Anonymous.png");
 }
 
 // UI Msg

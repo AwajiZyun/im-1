@@ -23,12 +23,11 @@ public:
 	LRESULT OnSendMessageResponse(WPARAM wParam);
 	LRESULT OnAddFriendResponse(WPARAM wParam);
 	LRESULT OnUpdateFriendListResponse(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-	LRESULT OnUpdateFriendInfoResponse(WPARAM wParam);
-	LRESULT OnUpdateFriendResponse(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnDeleteFriendResponse(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnAddFriendPush(WPARAM wParam);  
 	LRESULT OnOnlineInfoPush(WPARAM wParam);
 	LRESULT OnDeleteFriendPush(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+	LRESULT OnUpdateFriendInfoPush(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 	LRESULT OnShowFriendInfo(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnDeleteFriend(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);

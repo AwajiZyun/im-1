@@ -149,8 +149,6 @@ LRESULT CMainWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 		lRes = OnAddFriendResponse(wParam); break;
 	case WM_UPDATE_FRIEND_LIST_RESPONSE:
 		lRes = OnUpdateFriendListResponse(uMsg, wParam, lParam, bHandled); break;
-	case WM_UPDATE_FRIEND_INFO_RESPONSE:
-		lRes = OnUpdateFriendInfoResponse(wParam); break;
 	case WM_ADD_FRIEND_PUSH:
 		lRes = OnAddFriendPush(wParam); break;
 	case WM_ONLINE_INFO_PUSH:
@@ -163,6 +161,8 @@ LRESULT CMainWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, B
 		lRes = OnDeleteFriendResponse(uMsg, wParam, lParam, bHandled); break;
 	case WM_DELETE_FRIEND_PUSH:
 		lRes = OnDeleteFriendPush(uMsg, wParam, lParam, bHandled); break;
+	case WM_UPDATE_FRIEND_INFO_PUSH:
+		lRes = OnUpdateFriendInfoPush(uMsg, wParam, lParam, bHandled); break;
 	case WM_TIMER:
 		lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
 	default:
@@ -188,11 +188,6 @@ LRESULT CMainWnd::OnTimer(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandle
 		if (NET_WORKER_STATE_CONNECTED == g_pNetWorker->GetCurState()) {
 			g_pNetWorker->SendHeartbeat();
 		}
-		break;
-	case TIMER_ID_UPDATE_FRIEND_INFO:
-		bHandled = true;
-		::KillTimer(m_hWnd, TIMER_ID_UPDATE_FRIEND_INFO);
-		MessageBox(nullptr, L"服务器响应超时", L"提示", MB_ICONINFORMATION);
 		break;
 	default:
 		break;
@@ -303,6 +298,14 @@ LRESULT CMainWnd::OnBtnUpdateAccount()
 	usrInfoWnd.Create(this->m_hWnd, L"UsrInfoWnd", UI_WNDSTYLE_DIALOG, UI_WNDSTYLE_EX_FRAME);
 	usrInfoWnd.CenterWindow();
 	usrInfoWnd.ShowModal();
+	// Update head image
+	m_pBtnHead->SetNormalImage(0 == g_accountInfo.sex ? L"HeadMale.png" : 
+		1 == g_accountInfo.sex ? L"HeadFemale.png" : L"Anonymous.png");
+	m_pBtnHead->SetHotImage(0 == g_accountInfo.sex ? L"HeadMaleHot.png" :
+		1 == g_accountInfo.sex ? L"HeadFemaleHot.png" : L"AnonymousHot.png");
+	m_pBtnHead->SetPushedImage(0 == g_accountInfo.sex ? L"HeadMale.png" :
+		1 == g_accountInfo.sex ? L"HeadFemale.png" : L"Anonymous.png");
+
 	return 0;
 }
 
@@ -395,19 +398,16 @@ LRESULT CMainWnd::OnShowFriendInfo(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL
 {
 	bHandled = true;
 	
-	ST_ACCOUNT_INFO accountInfo = { 0 };
-	memcpy_s(&accountInfo, sizeof(accountInfo), &g_vecFriendList[m_pListFriend->GetCurSel()], sizeof(accountInfo));
-	if (wstring(accountInfo.ID).empty()) {
+	ST_ACCOUNT_INFO stAccountInfo = { 0 };
+	memcpy_s(&stAccountInfo, sizeof(stAccountInfo), &g_vecFriendList[m_pListFriend->GetCurSel()], sizeof(stAccountInfo));
+	if (wstring(stAccountInfo.ID).empty()) {
 		return -1;
 	}
-	int ret = g_pNetWorker->UpdateFriendInfo(accountInfo.ID);
-	if (0 == ret){
-		// Wait for response
-		::SetTimer(m_hWnd, TIMER_ID_UPDATE_FRIEND_INFO, TIMER_ELAPSE_UPDATE_FRIEND_INFO, nullptr);
-	}
-	else {
-		MessageBox(nullptr, L"未连接服务器", L"提示", MB_ICONINFORMATION);
-	}
+	// Show friend info dialog
+	CFriendInfoWnd* pFriendWnd = new CFriendInfoWnd(stAccountInfo);
+	pFriendWnd->Create(m_hWnd, L"FriendInfoWnd", UI_WNDSTYLE_DIALOG, UI_WNDSTYLE_EX_FRAME);
+	pFriendWnd->CenterWindow();
+	pFriendWnd->ShowModal();
 
 	return 0;
 }
@@ -502,62 +502,6 @@ LRESULT CMainWnd::OnUpdateFriendListResponse(UINT uMSg, WPARAM wParam, LPARAM lP
 	delete[] pWJsonString;
 	pJsonString = reinterpret_cast<char*>(pStDataHead);
 	delete[] pJsonString;
-
-	return ret;
-}
-
-// Update friend information response handler
-LRESULT CMainWnd::OnUpdateFriendResponse(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	::KillTimer(m_hWnd, TIMER_ID_UPDATE_FRIEND_INFO);
-	LRESULT ret = 0;
-	ST_DATA_HEAD* pStDataHead = reinterpret_cast<ST_DATA_HEAD*>(wParam);
-	if (!pStDataHead) {
-		return -1;
-	}
-	char* pJsonString = reinterpret_cast<char*>(pStDataHead) + sizeof(ST_DATA_HEAD);
-	WCHAR* pWJsonString = CUtility::Utf8ToUtf16(pJsonString);
-	char* pAnsiJsonString = CUtility::Utf16ToGB(pWJsonString);
-	// Parse json string
-	Json::CharReaderBuilder builder;
-	Json::CharReader * reader = builder.newCharReader();
-	Json::Value root;
-	string errors;
-
-	ST_ACCOUNT_INFO stAccountInfo = { 0 };
-	if (reader->parse(pAnsiJsonString, pAnsiJsonString + strlen(pAnsiJsonString), &root, &errors)) {
-		if (!root["data"].isNull()) {
-			Json::Value data = root["data"];
-			WCHAR* wCode = CUtility::GBToUtf16(data["code"].asString().data());
-			for (auto& friendInfo : g_vecFriendList) {
-				if (0 == wcscmp(friendInfo.ID, wCode)) {
-					WCHAR* wEmail = CUtility::GBToUtf16(data["email"].asString().data());
-					WCHAR* wNickname = CUtility::GBToUtf16(data["nickname"].asString().data());
-					friendInfo.sex = data["sex"].asInt();
-					friendInfo.online = data["online"].asInt();
-					memcpy_s(friendInfo.ID, sizeof(friendInfo.ID), wCode, wcslen(wCode) * sizeof(WCHAR));
-					memcpy_s(friendInfo.email, sizeof(friendInfo.email), wEmail, wcslen(wEmail) * sizeof(WCHAR));
-					memcpy_s(friendInfo.nickName, sizeof(friendInfo.nickName), wNickname, wcslen(wNickname) * sizeof(WCHAR));
-					delete[] wCode;
-					delete[] wEmail;
-					delete[] wNickname;
-					stAccountInfo = friendInfo;
-				}
-			}
-		}
-	}
-
-	delete[] reader;
-	delete[] pAnsiJsonString;
-	delete[] pWJsonString;
-	pJsonString = reinterpret_cast<char*>(pStDataHead);
-	delete[] pJsonString;
-
-	// Show friend info dialog
-	CFriendInfoWnd* pFriendWnd = new CFriendInfoWnd(stAccountInfo);
-	pFriendWnd->Create(m_hWnd, L"FriendInfoWnd", UI_WNDSTYLE_DIALOG, UI_WNDSTYLE_EX_FRAME);
-	pFriendWnd->CenterWindow();
-	pFriendWnd->ShowModal();
 
 	return ret;
 }
@@ -759,66 +703,6 @@ LRESULT CMainWnd::OnAddFriendResponse(WPARAM wParam)
 	}
 	else {
 		MessageBox(nullptr, L"添加好友失败", L"错误", MB_ICONERROR);
-	}
-
-	delete[] reader;
-	delete[] pAnsiJsonString;
-	delete[] pWJsonString;
-	pJsonString = reinterpret_cast<char*>(pStDataHead);
-	delete[] pJsonString;
-
-	return ret;
-}
-
-// Update friend info response handler
-LRESULT CMainWnd::OnUpdateFriendInfoResponse(WPARAM wParam)
-{
-	int ret = 0;
-	ST_DATA_HEAD* pStDataHead = reinterpret_cast<ST_DATA_HEAD*>(wParam);
-	if (!pStDataHead) {
-		return -1;
-	}
-	char* pJsonString = reinterpret_cast<char*>(pStDataHead) + sizeof(ST_DATA_HEAD);
-	WCHAR* pWJsonString = CUtility::Utf8ToUtf16(pJsonString);
-	char* pAnsiJsonString = CUtility::Utf16ToGB(pWJsonString);
-	// Parse json string
-	Json::CharReaderBuilder builder;
-	Json::CharReader * reader = builder.newCharReader();
-	Json::Value root;
-	string errors;
-	bool bSuccess;
-	if (reader->parse(pAnsiJsonString, pAnsiJsonString + strlen(pAnsiJsonString), &root, &errors)) {
-		if (!root["success"].isNull()) {
-			bSuccess = root["success"].asBool();
-		}
-	}
-	if (bSuccess) {
-		ST_ACCOUNT_INFO accountInfo = { 0 };
-		Json::Value data = root["data"];
-		if (!data["code"].isNull()) {
-			WCHAR* wCode = CUtility::GBToUtf16(data["code"].asString().data());
-			WCHAR* wEmail = CUtility::GBToUtf16(data["email"].asString().data());
-			WCHAR* wNickname = CUtility::GBToUtf16(data["nickname"].asString().data());
-			accountInfo.sex = data["sex"].asInt();
-			accountInfo.online = data["online"].asInt();
-			memcpy_s(accountInfo.ID, sizeof(accountInfo.ID), wCode, wcslen(wCode));
-			memcpy_s(accountInfo.email, sizeof(accountInfo.email), wCode, wcslen(wEmail));
-			memcpy_s(accountInfo.nickName, sizeof(accountInfo.nickName), wCode, wcslen(wNickname));
-			delete[] wCode;
-			delete[] wEmail;
-			delete[] wNickname;
-			// Update friend info
-			if (!g_vecFriendList.empty()) {
-				for (UINT idx = 0; idx < g_vecFriendList.size(); idx++) {
-					if (0 == wcscmp(g_vecFriendList[idx].ID, accountInfo.ID)) {
-						g_vecFriendList[idx] = accountInfo;
-					}
-				}
-			}
-		}
-	}
-	else {
-		;
 	}
 
 	delete[] reader;
@@ -1045,6 +929,53 @@ LRESULT CMainWnd::OnDeleteFriendPush(UINT uMSg, WPARAM wParam, LPARAM lParam, BO
 			}
 			// Update friend list UI
 			m_pListFriend->Remove(m_pListFriend->GetItemAt(delIdx));
+		}
+	}
+
+	delete[] reader;
+	delete[] pAnsiJsonString;
+	delete[] pWJsonString;
+	pJsonString = reinterpret_cast<char*>(pStDataHead);
+	delete[] pJsonString;
+
+	return ret;
+}
+
+// Update friend information push hanlder
+LRESULT CMainWnd::OnUpdateFriendInfoPush(UINT uMSg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	LRESULT ret = 0;
+	ST_DATA_HEAD* pStDataHead = reinterpret_cast<ST_DATA_HEAD*>(wParam);
+	if (!pStDataHead) {
+		return -1;
+	}
+	char* pJsonString = reinterpret_cast<char*>(pStDataHead) + sizeof(ST_DATA_HEAD);
+	WCHAR* pWJsonString = CUtility::Utf8ToUtf16(pJsonString);
+	char* pAnsiJsonString = CUtility::Utf16ToGB(pWJsonString);
+	// Parse json string
+	Json::CharReaderBuilder builder;
+	Json::CharReader * reader = builder.newCharReader();
+	Json::Value root;
+	string errors;
+
+	if (reader->parse(pAnsiJsonString, pAnsiJsonString + strlen(pAnsiJsonString), &root, &errors)) {
+		if (!root["data"].isNull()) {
+			Json::Value data = root["data"];
+			WCHAR* wCode = CUtility::GBToUtf16(data["code"].asString().data());
+			for (auto& friendInfo : g_vecFriendList) {
+				if (0 == wcscmp(friendInfo.ID, wCode)) {
+					WCHAR* wEmail = CUtility::GBToUtf16(data["email"].asString().data());
+					WCHAR* wNickname = CUtility::GBToUtf16(data["nickname"].asString().data());
+					friendInfo.sex = data["sex"].asInt();
+					friendInfo.online = data["online"].asInt();
+					memcpy_s(friendInfo.ID, sizeof(friendInfo.ID), wCode, wcslen(wCode) * sizeof(WCHAR));
+					memcpy_s(friendInfo.email, sizeof(friendInfo.email), wEmail, wcslen(wEmail) * sizeof(WCHAR));
+					memcpy_s(friendInfo.nickName, sizeof(friendInfo.nickName), wNickname, wcslen(wNickname) * sizeof(WCHAR));
+					delete[] wCode;
+					delete[] wEmail;
+					delete[] wNickname;
+				}
+			}
 		}
 	}
 

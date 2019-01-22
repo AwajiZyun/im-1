@@ -35,7 +35,7 @@
         <HorizontalLayout height="40">
           <Label width="100" align="right" textcolor="#FFA8A8A8" textpadding="0,0,0,10" font="1" text="性别" />
           <Control width="10" />
-          <Combo name="comboSex" width="130" height="30" bordercolor="FFC8C8C8" font="0" textpadding="5,0,0,0" normalimage="ComboNormal.bmp" hotimage="ComboNormal.bmp" pushedimage="ComboPush.bmp" itemtextpadding="5,0,0,0">
+          <Combo name="comboSex" width="130" height="30" bordercolor="FFC8C8C8" font="0" textpadding="5,0,0,0" normalimage="ComboNormal.png" hotimage="ComboNormal.png" pushedimage="ComboPush.png" itemtextpadding="5,0,0,0">
             <ListLabelElement text="男" selected="true" padding="5,0,0,0" />
             <ListLabelElement text="女" padding="5,0,0,0" />
             <ListLabelElement text="其他" padding="5,0,0,0" />

@@ -15,48 +15,6 @@ CLoginWnd::CLoginWnd()
 }
 
 // Sys msg
-#if 0
-LRESULT CLoginWnd::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	LRESULT lRes = 0;
-	BOOL bHandled = TRUE;
-
-	switch (uMsg) {
-	case WM_CREATE:
-		lRes = OnCreate(uMsg, wParam, lParam, bHandled); break;
-	case WM_CLOSE:
-		lRes = OnClose(uMsg, wParam, lParam, bHandled); break;
-	case WM_DESTROY:
-		lRes = OnDestroy(uMsg, wParam, lParam, bHandled); break;
-	case WM_NCACTIVATE:
-		lRes = OnNcActivate(uMsg, wParam, lParam, bHandled); break;
-	case WM_NCHITTEST:
-		lRes = OnNcHitTest(uMsg, wParam, lParam, bHandled); break;
-	case WM_SIZE:
-		lRes = OnSize(uMsg, wParam, lParam, bHandled); break;
-	case WM_GETMINMAXINFO:
-		lRes = OnGetMinMaxInfo(uMsg, wParam, lParam, bHandled); break;
-	case WM_SYSCOMMAND:
-		lRes = OnSysCommand(uMsg, wParam, lParam, bHandled); break;
-	case WM_ACTIVATE:
-		bHandled = FALSE;	break;
-	case WM_ACCOUNT_LOGIN_RESPONSE:
-		lRes = OnLoginResponse(wParam);	break;
-	case WM_TIMER:
-		lRes = OnTimer(uMsg, wParam, lParam, bHandled); break;
-	default:
-		bHandled = FALSE;
-	}
-	if (bHandled) {
-		return lRes;
-	}
-	if (m_pm.MessageHandler(uMsg, wParam, lParam, lRes)) {
-		return lRes;
-	}
-	return CWindowWnd::HandleMessage(uMsg, wParam, lParam);
-}
-#endif
-
 LRESULT CLoginWnd::HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	LRESULT lRes = 0;
@@ -123,43 +81,6 @@ void CLoginWnd::Notify(TNotifyUI& msg)
 	__super::Notify(msg);
 }
 
-#if 0
-LRESULT CLoginWnd::OnCreate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	LONG styleValue = ::GetWindowLong(*this, GWL_STYLE);
-	styleValue &= ~WS_CAPTION;
-	::SetWindowLong(*this, GWL_STYLE, styleValue | WS_CLIPSIBLINGS | WS_CLIPCHILDREN);
-	g_hWndLogin = this->m_hWnd;
-
-	m_pm.Init(m_hWnd);
-	CDialogBuilder builder;
-	CControlUI* pRoot = builder.Create(L"xml\\Login.xml", (UINT)0, (UINT)0, &m_pm);
-	if (!pRoot) {
-		MessageBox(NULL, L"UI failed", L"", 0);
-		return 0;
-	}
-	m_pm.AttachDialog(pRoot);
-	m_pm.AddNotifier(this);
-
-	// Prepare network 
-	if (!g_pNetWorker) {
-		g_pNetWorker = new(std::nothrow) CNetWorker();
-		if (!g_pNetWorker) {
-			MessageBox(nullptr, L"new failed", L"Error", MB_ICONERROR);
-			return -1;
-		}
-	}
-	//g_pNetWorker->Start();
-
-	if (0 == InitControls()) {
-		return 0;
-	}
-
-	MessageBox(nullptr, L"login xml error", L"Error", MB_ICONERROR);
-	return -1;
-}
-#endif
-
 void CLoginWnd::InitWindow()
 {
 	g_hWndLogin = this->m_hWnd;
@@ -194,83 +115,6 @@ LRESULT CLoginWnd::OnDestroy(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 	bHandled = FALSE;
 	return 0;
 }
-
-#if 0
-LRESULT CLoginWnd::OnNcActivate(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	if (::IsIconic(*this)) bHandled = FALSE;
-	return (wParam == 0) ? TRUE : FALSE;
-}
-
-LRESULT CLoginWnd::OnNcHitTest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	POINT pt; pt.x = GET_X_LPARAM(lParam); pt.y = GET_Y_LPARAM(lParam);
-	::ScreenToClient(*this, &pt);
-
-	RECT rcClient;
-	::GetClientRect(*this, &rcClient);
-
-	RECT rcCaption = m_pm.GetCaptionRect();
-	if (pt.x >= rcClient.left + rcCaption.left && pt.x < rcClient.right - rcCaption.right \
-		&& pt.y >= rcCaption.top && pt.y < rcCaption.bottom) {
-		CControlUI* pControl = static_cast<CControlUI*>(m_pm.FindControl(pt));
-		if (pControl && _tcscmp(pControl->GetClass(), DUI_CTR_BUTTON) != 0 &&
-			_tcscmp(pControl->GetClass(), DUI_CTR_OPTION) != 0 &&
-			_tcscmp(pControl->GetClass(), DUI_CTR_TEXT) != 0)
-			return HTCAPTION;
-	}
-
-	return HTCLIENT;
-}
-
-
-LRESULT CLoginWnd::OnSize(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	SIZE szRoundCorner = m_pm.GetRoundCorner();
-	if (!::IsIconic(*this) && (szRoundCorner.cx != 0 || szRoundCorner.cy != 0)) {
-		CDuiRect rcWnd;
-		::GetWindowRect(*this, &rcWnd);
-		rcWnd.Offset(-rcWnd.left, -rcWnd.top);
-		rcWnd.right++; rcWnd.bottom++;
-		HRGN hRgn = ::CreateRoundRectRgn(rcWnd.left, rcWnd.top, rcWnd.right, rcWnd.bottom, szRoundCorner.cx, szRoundCorner.cy);
-		::SetWindowRgn(*this, hRgn, TRUE);
-		::DeleteObject(hRgn);
-	}
-
-	bHandled = FALSE;
-	return 0;
-}
-
-LRESULT CLoginWnd::OnGetMinMaxInfo(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	MONITORINFO oMonitor = {};
-	oMonitor.cbSize = sizeof(oMonitor);
-	::GetMonitorInfo(::MonitorFromWindow(*this, MONITOR_DEFAULTTOPRIMARY), &oMonitor);
-	CDuiRect rcWork = oMonitor.rcWork;
-	rcWork.Offset(-oMonitor.rcMonitor.left, -oMonitor.rcMonitor.top);
-
-	LPMINMAXINFO lpMMI = (LPMINMAXINFO)lParam;
-	lpMMI->ptMaxPosition.x = rcWork.left;
-	lpMMI->ptMaxPosition.y = rcWork.top;
-	lpMMI->ptMaxSize.x = rcWork.right;
-	lpMMI->ptMaxSize.y = rcWork.bottom;
-
-	bHandled = FALSE;
-	return 0;
-}
-
-LRESULT CLoginWnd::OnSysCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-{
-	if (wParam == SC_CLOSE) {
-		::PostQuitMessage(0L);
-		bHandled = TRUE;
-		return 0;
-	}
-	LRESULT lRes = CWindowWnd::HandleMessage(uMsg, wParam, lParam);
-
-	return lRes;
-}
-#endif
 
 LRESULT CLoginWnd::OnTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -313,18 +157,20 @@ int CLoginWnd::InitControls()
 				m_pComboUsrName->Add(pLabel);
 			}
 		}
-		if (!m_vecLoginUsrInfo.empty()) {
-			m_pComboUsrName->SelectItem(0);
-		}
 
 		if (1 == ::GetPrivateProfileIntW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_SAVE_PWD, 0, CFG_PUBLIC_CFG_FILE)) {
 			WCHAR wUsrID[32] = { 0 };
-			WCHAR wPwd[32] = { 0 };
 			::GetPrivateProfileStringW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_ACCOUNT_ID, L"", wUsrID, sizeof(wUsrID), CFG_PUBLIC_CFG_FILE);
-			::GetPrivateProfileStringW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_ACCOUNT_PWD, L"", wPwd, sizeof(wPwd), CFG_PUBLIC_CFG_FILE);
 			int sex = ::GetPrivateProfileInt(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_ACCOUNT_SEX, 0, CFG_PUBLIC_CFG_FILE);
-			//m_pEditUsrCode->SetText(wUsrID);
-			//m_pEditUsrPwd->SetText(wPwd);
+			if (!m_vecLoginUsrInfo.empty()) {
+				for (UINT idx = 0; idx < m_vecLoginUsrInfo.size(); idx++) {
+					if (0 == wcscmp(wUsrID, m_vecLoginUsrInfo[idx].ID)) {
+						m_pComboUsrName->SelectItem(idx);
+						break;
+					}
+				}
+			}
+
 			m_pOptionSavePwd->Selected(true, false);
 			if (0 == sex) {
 				m_pCtlHeadImg->SetBkImage(L"HeadMale.png");
@@ -360,15 +206,12 @@ LRESULT CLoginWnd::OnBtnLogin()
 	}
 	else {
 		m_pBtnLogin->SetEnabled(false);
-		// Save ID and pwd
+		// Save ID
 		if (1 == ::GetPrivateProfileIntW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_SAVE_PWD, 0, CFG_PUBLIC_CFG_FILE)) {
 			::WritePrivateProfileStringW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_ACCOUNT_ID, usrName, CFG_PUBLIC_CFG_FILE);
-			// TODO: encrypt password 
-			::WritePrivateProfileStringW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_ACCOUNT_PWD, usrPwd, CFG_PUBLIC_CFG_FILE);
 		}
 		else {
 			::WritePrivateProfileStringW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_ACCOUNT_ID, L"", CFG_PUBLIC_CFG_FILE);
-			::WritePrivateProfileStringW(CFG_PUBLIC_APP_NAME, CFG_PUBLIC_KEY_ACCOUNT_PWD, L"", CFG_PUBLIC_CFG_FILE);
 		}
 
 		m_pBtnLogin->SetText(L"µÇÂ¼ÖÐ...");
