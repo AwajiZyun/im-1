@@ -87,7 +87,7 @@ public:
 
 	int Start();
 	int Stop();
-	int GetCurState() { return m_nCurState; };
+	int GetCurState() { return m_nCurState; }
 	int HeartbeatCheck(bool bStart);
 
 	int RegistAccount(wstring email, wstring pwd, wstring nickName, int sex);

@@ -157,6 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Base64.h" />
+    <ClInclude Include="CChatRecord.h" />
     <ClInclude Include="CFriendInfoWnd.h" />
     <ClInclude Include="CLoginWnd.h" />
     <ClInclude Include="CMainWnd.h" />
@@ -186,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Base64.cpp" />
+    <ClCompile Include="CChatRecord.cpp" />
     <ClCompile Include="CFriendInfoWnd.cpp" />
     <ClCompile Include="CLoginWnd.cpp" />
     <ClCompile Include="CMainWnd.cpp" />
